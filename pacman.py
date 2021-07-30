@@ -23,10 +23,7 @@ class Pacman(object):
     def update(self, dt):
         self.position += self.directions[self.direction]*self.speed*dt
         direction = self.getValidKey()
-            
-        #if direction is not STOP:
-         #   self.moveByKey(direction)
-
+         
         if self.overshotTarget():
             self.node = self.target
             self.target = self.getNewTarget(direction)
@@ -37,16 +34,11 @@ class Pacman(object):
 
             if self.target is self.node:
                 self.direction = STOP
-                self.setPosition()
+            self.setPosition()
         else: 
             if self.oppositeDirection(direction):
                 self.reverseDirection()
-        
-    def getNewTarget(self, direction):
-        if self.validDirection(direction):
-            return self.node.neighbors[direction]
-        return self.node
-               
+            
     def getValidKey(self):
         key_pressed = pygame.key.get_pressed()
         if key_pressed[K_UP]:
@@ -57,21 +49,18 @@ class Pacman(object):
             return LEFT
         if key_pressed[K_RIGHT]:
             return RIGHT
-        return STOP
-
-    """
-    def moveByKey(self, direction):
-        if self.direction is STOP:
-            if self.node.neighbors[direction] is not None:
-                self.target = self.node.neighbors[direction]
-                self.direction = direction
-    """     
+        return STOP  
 
     def validDirection(self, direction):
         if direction is not STOP:
             if self.node.neighbors[direction] is not None:
                 return True
         return False
+
+    def getNewTarget(self, direction):
+        if self.validDirection(direction):
+            return self.node.neighbors[direction]
+        return self.node
 
     def overshotTarget(self):
         if self.target is not None:
