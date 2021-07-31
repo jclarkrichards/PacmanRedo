@@ -17,9 +17,10 @@ class GameController(object):
         self.background.fill(BLACK)
 
     def startGame(self):
-        self.nodes = NodeGroup()
-        self.nodes.setupTestNodes()
-        self.pacman = Pacman(self.nodes.nodeList[0])
+        self.nodes = NodeGroup("mazetest.txt")###
+        #self.nodes.setupTestNodes()###
+        #self.pacman = Pacman(self.nodes.nodeList[0])
+        self.pacman = Pacman(self.nodes.getPacmanNode())###
     
     def update(self):
         dt = self.clock.tick(30) / 1000.0
