@@ -7,7 +7,7 @@ class Node(object):
     def __init__(self, row, column):
         self.row, self.column = row, column
         self.position = Vector2(column*TILEWIDTH, row*TILEHEIGHT)
-        self.neighbors = {UP:None, DOWN:None, LEFT:None, RIGHT:None}
+        self.neighbors = {UP:None, DOWN:None, LEFT:None, RIGHT:None, PORTAL:None}
         
     def __str__(self):
         return "NODE at (" + str(self.row) + ", " + str(self.column)+")"
@@ -82,7 +82,14 @@ class NodeGroup(object):
     def getPacmanNode(self):
         nodes = list(self.nodesLUT.values())
         return nodes[0]
-    
+
+   
+    def setPortalPair(self, key1, key2):
+        if key1 in self.nodesLUT.keys() and key2 in self.nodesLUT.keys():
+            self.nodesLUT[key1].neighbors[PORTAL] = self.nodesLUT[key2]
+            self.nodesLUT[key2].neighbors[PORTAL] = self.nodesLUT[key1]
+  
+
     def render(self, screen):
         for node in self.nodesLUT.values():
             node.render(screen)
