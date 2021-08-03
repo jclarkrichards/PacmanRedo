@@ -19,8 +19,8 @@ LEFT = 2
 RIGHT = -2
 PORTAL = 3
 
-SCATTER = 0###
-CHASE = 1###
-FREIGHT = 2###
-SPAWN = 3###
-FOLLOW = 4###
+SCATTER = 0
+CHASE = 1
+FREIGHT = 2
+SPAWN = 3
+FOLLOW = 4

@@ -4,13 +4,12 @@ from constants import *
 import numpy as np
 
 class Node(object):
-    def __init__(self, row, column):
-        self.row, self.column = row, column
-        self.position = Vector2(column*TILEWIDTH, row*TILEHEIGHT)
+    def __init__(self, x, y):
+        self.position = Vector2(x, y)
         self.neighbors = {UP:None, DOWN:None, LEFT:None, RIGHT:None, PORTAL:None}
         
     def __str__(self):
-        return "NODE at (" + str(self.row) + ", " + str(self.column)+")"
+        return "NODE at (" + str(self.x) + ", " + str(self.y)+")"
 
     def render(self, screen):
         for n in self.neighbors.keys():
@@ -29,54 +28,50 @@ class NodeGroup(object):
         self.createNodeTable(data)
         self.connectHorizontally(data)
         self.connectVertically(data)
-
-        #For checking
-        for key in self.nodesLUT.keys():
-            print(key)
-            node = self.nodesLUT[key]
-            for nkey in node.neighbors.keys():
-                print(nkey)
-                print(node.neighbors[nkey])
-            print("")
-            
+        
     def readMazeFile(self, textfile):
         return np.loadtxt(textfile, dtype='<U1')
 
-    def createNodeTable(self, data):
-        for i in list(range(data.shape[0])):
-            for j in list(range(data.shape[1])):
-                if data[i][j] == '+':
-                    self.nodesLUT[(i,j)] = Node(i, j)
+    def createNodeTable(self, data, xoffset=0, yoffset=0):
+        for row in list(range(data.shape[0])):
+            for col in list(range(data.shape[1])):
+                if data[row][col] == '+':
+                    x, y = self.constructKey(col+xoffset, row+yoffset)
+                    self.nodesLUT[(x, y)] = Node(x, y)
 
+    def constructKey(self, x, y):
+        return x * TILEWIDTH, y * TILEHEIGHT
 
-    def connectHorizontally(self, data):
-        for i in list(range(data.shape[0])):
+    def connectHorizontally(self, data, xoffset=0, yoffset=0):
+        for row in list(range(data.shape[0])):
             key = None
-            for j in list(range(data.shape[1])):
-                if data[i][j] == '+':
+            for col in list(range(data.shape[1])):
+                if data[row][col] == '+':
                     if key is None:
-                        key = (i, j)
+                        key = self.constructKey(col+xoffset, row+yoffset)
                     else:
-                        self.nodesLUT[key].neighbors[RIGHT] = self.nodesLUT[(i,j)]
-                        self.nodesLUT[(i,j)].neighbors[LEFT] = self.nodesLUT[key]
-                        key = (i, j)
-                elif data[i][j] != '-':
+                        otherkey = self.constructKey(col+xoffset, row+yoffset)
+                        self.nodesLUT[key].neighbors[RIGHT] = self.nodesLUT[otherkey]
+                        self.nodesLUT[otherkey].neighbors[LEFT] = self.nodesLUT[key]
+                        key = otherkey
+                elif data[row][col] != '-':
                     key = None
 
 
-    def connectVertically(self, data):
+    def connectVertically(self, data, xoffset=0, yoffset=0):
         dataT = data.transpose()
-        for i in list(range(dataT.shape[0])):
+        for col in list(range(dataT.shape[0])):
             key = None
-            for j in list(range(dataT.shape[1])):
-                if dataT[i][j] == '+':
+            for row in list(range(dataT.shape[1])):
+                if dataT[col][row] == '+':
                     if key is None:
-                        key = (j, i)
+                        key = self.constructKey(col+xoffset, row+yoffset)
                     else:
-                        self.nodesLUT[key].neighbors[DOWN] = self.nodesLUT[(j, i)]
-                        self.nodesLUT[(j, i)].neighbors[UP] = self.nodesLUT[key]
-                        key = (j, i)
-                elif dataT[i][j] != '|':
+                        otherkey = self.constructKey(col+xoffset, row+yoffset)
+                        self.nodesLUT[key].neighbors[DOWN] = self.nodesLUT[otherkey]
+                        self.nodesLUT[otherkey].neighbors[UP] = self.nodesLUT[key]
+                        key = otherkey
+                elif dataT[col][row] != '|':
                     key = None
 
     def getPacmanNode(self):
@@ -84,11 +79,35 @@ class NodeGroup(object):
         return nodes[0]
 
    
-    def setPortalPair(self, key1, key2):
+    def setPortalPair(self, pair1, pair2):
+        key1 = self.constructKey(*pair1)
+        key2 = self.constructKey(*pair2)
         if key1 in self.nodesLUT.keys() and key2 in self.nodesLUT.keys():
             self.nodesLUT[key1].neighbors[PORTAL] = self.nodesLUT[key2]
             self.nodesLUT[key2].neighbors[PORTAL] = self.nodesLUT[key1]
   
+    def createHomeNodes(self, xoffset, yoffset):
+        homedata = np.array([['.','.','+','.','.'],
+                             ['.','.','|','.','.'],
+                             ['+','.','|','.','+'],
+                             ['+','-','+','-','+'],
+                             ['+','.','.','.','+']])
+
+        self.createNodeTable(homedata, xoffset, yoffset)
+        print(list(self.nodesLUT.keys()))
+        self.connectHorizontally(homedata, xoffset, yoffset)
+        self.connectVertically(homedata, xoffset, yoffset)
+        keyhome = self.constructKey(xoffset+2, yoffset)
+        keyleft = self.constructKey(12, 14)
+        keyright = self.constructKey(15, 14)
+        print(keyhome)
+        print(keyleft)
+        print(keyright)
+        self.nodesLUT[keyleft].neighbors[RIGHT] = self.nodesLUT[keyhome]
+        self.nodesLUT[keyright].neighbors[LEFT] = self.nodesLUT[keyhome]
+        self.nodesLUT[keyhome].neighbors[RIGHT] = self.nodesLUT[keyright]
+        self.nodesLUT[keyhome].neighbors[LEFT] = self.nodesLUT[keyleft]
+        
 
     def render(self, screen):
         for node in self.nodesLUT.values():

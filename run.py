@@ -5,7 +5,7 @@ from pacman import Pacman
 from nodes import NodeGroup
 from pellets import PelletGroup
 from ghosts import Ghost
-from modes import WorldMode###
+from modes import MainMode
 
 class GameController(object):
     def __init__(self):
@@ -14,7 +14,7 @@ class GameController(object):
         self.background = None
         self.setBackground()
         self.clock = pygame.time.Clock()
-        self.mode = WorldMode()###
+        self.mode = MainMode()
 
     def setBackground(self):
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
@@ -22,14 +22,15 @@ class GameController(object):
 
     def startGame(self):
         self.nodes = NodeGroup("maze1.txt")
-        self.nodes.setPortalPair((17, 0), (17,27))
+        self.nodes.setPortalPair((0, 17), (27, 17))
+        self.nodes.createHomeNodes(11.5, 14)###
         self.pacman = Pacman(self.nodes.getPacmanNode())
         self.pellets = PelletGroup("maze1_pellets.txt")
-        self.ghost = Ghost(self.nodes.getPacmanNode(), self.pacman, self.mode)####
+        self.ghost = Ghost(self.nodes.getPacmanNode(), self.pacman, self.mode)
     
     def update(self):
         dt = self.clock.tick(30) / 1000.0
-        self.mode.update(dt)###
+        self.mode.update(dt)
         self.pacman.update(dt)
         self.ghost.update(dt)
         self.pellets.update(dt)
