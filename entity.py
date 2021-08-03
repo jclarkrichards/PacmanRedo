@@ -27,9 +27,11 @@ class Entity(object):
         self.position += self.directions[self.direction]*self.speed*dt
          
         if self.overshotTarget():
-            directions = self.validDirections()
-            direction = self.directionMethod(directions)
             self.node = self.target
+            directions = self.validDirections()
+            #print("Valid: " + str(directions))
+            direction = self.directionMethod(directions)
+            
             if self.node.neighbors[PORTAL] is not None:
                 self.node = self.node.neighbors[PORTAL]
             self.target = self.getNewTarget(direction)
@@ -88,8 +90,9 @@ class Entity(object):
     def goalDirection(self, directions):
         distances = []
         for direction in directions:
-            vec = self.node.neighbors[direction].position - self.goal
+            vec = self.node.position + self.directions[direction]*TILEWIDTH - self.goal
             distances.append(vec.magnitudeSquared())
+        
         index = distances.index(min(distances))
         return directions[index]
 

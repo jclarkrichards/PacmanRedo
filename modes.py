@@ -1,25 +1,31 @@
 from stack import Stack
+from constants import *
 
-class Mode(object):
-    def __init__(self, name="", time=None, speedMult=1, direction=None):
-        self.name = name
-        self.time = time
-        self.speedMult = speedMult
-        self.direction = direction
+
+class WorldMode(object):
+    def __init__(self):
         self.timer = 0
-        self.started = False
-        self.finished = False
+        self.scatterMode()
 
     def update(self, dt):
-        if self.started:
-            self.timer += dt
-            if self.time is not None:
-                if self.timer >= self.time:
-                    self.finished = True
+        self.timer += dt
+        if self.timer >= self.time:
+            if self.mode is SCATTER:
+                self.chaseMode()
+            elif self.mode is CHASE:
+                self.scatterMode()
 
-                #self.reverseDirection()
-                #self.mode = self.modeStack.pop()
-                #self.timer = 0
+    def scatterMode(self):
+        self.mode = SCATTER
+        self.time = 7
+        self.timer = 0
+
+    def chaseMode(self):
+        self.mode = CHASE
+        self.time = 20
+        self.timer = 0
+
+          
 
     
 
@@ -27,20 +33,25 @@ class Mode(object):
 class ModeMachine(object):
     def __init__(self):
         self.modes = Stack()
-        self.modes.push(Mode(name="CHASE"))
-        self.modes.push(Mode(name="SCATTER", time=5))
-        self.modes.push(Mode(name="CHASE", time=20))
-        self.modes.push(Mode(name="SCATTER", time=7))
-        self.modes.push(Mode(name="CHASE", time=20))
-        self.modes.push(Mode(name="SCATTER", time=7))
-        self.modes.push(Mode(name="CHASE", time=20))
-        self.modes.push(Mode(name="SCATTER", time=7))
-        self.mode = modes.pop()
+        #self.modes.push(SCATTER, time=7)
+        #self.current = self.modes.peek()
+        #self.scatter = {time:7}
+        #self.chase = {time:20}
+        #self.modes.push(Mode(name="CHASE"))
+        #self.modes.push(Mode(name="SCATTER", time=5))
+        #self.modes.push(Mode(name="CHASE", time=20))
+        #self.modes.push(Mode(name="SCATTER", time=7))
+        #self.modes.push(Mode(name="CHASE", time=20))
+        #self.modes.push(Mode(name="SCATTER", time=7))
+        #self.modes.push(Mode(name="CHASE", time=20))
+        #self.modes.push(Mode(name="SCATTER", time=7))
+        #self.mode = modes.pop()
 
     def update(self, dt):
-        if self.mode.finished:
-            self.mode = self.modespop()
+        #if self.current is not None:
+        self.current.udpate(dt)
 
-    def addMode(self, mode):
+
+    def setMode(self, mode):
         pass
 
