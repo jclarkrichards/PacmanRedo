@@ -23,7 +23,7 @@ class GameController(object):
         self.nodes.setPortalPair((17, 0), (17,27))
         self.pacman = Pacman(self.nodes.getPacmanNode())
         self.pellets = PelletGroup("maze1_pellets.txt")
-        self.ghost = Ghost(self.nodes.getPacmanNode())
+        self.ghost = Ghost(self.nodes.getPacmanNode(), self.pacman)####
     
     def update(self):
         dt = self.clock.tick(30) / 1000.0

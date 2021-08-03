@@ -6,43 +6,18 @@ from entity import Entity
 
 
 class Ghost(Entity):
-    def __init__(self, node):
+    def __init__(self, node, pacmantest=None):####
         Entity.__init__(self, node)
         self.name = "ghost"
         self.points = 200 
         self.goal = Vector2()
         self.directionMethod = self.goalDirection
+        self.pacman = pacmantest####
+
+    def update(self, dt):####
+        print(self.pacman.position)####
+        Entity.update(self, dt)####
       
-    """
-    def update(self, dt):
-        self.position += self.directions[self.direction]*self.speed*dt
-
-        if self.overshotTarget():
-            directions = self.validDirections()
-            direction = self.goalDirection(directions)
-            self.node = self.target
-            if self.node.neighbors[PORTAL] is not None:
-                self.node = self.node.neighbors[PORTAL]
-            self.target = self.getNewTarget(direction)
-            if self.target is not self.node:
-                self.direction = direction
-            else:
-                self.target = self.getNewTarget(self.direction)
-
-            #if self.target is self.node:
-            #    self.direction = STOP
-            self.setPosition()
-        #else: 
-        #    if self.oppositeDirection(direction):
-        #        self.reverseDirection()
-    """
-   
-
-    
-
-    #def getNextDirection(self):
-    #    validDirections = self.validDirections()
-    #    return self.randomDirection(validDirections)###
 
 
 
