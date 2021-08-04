@@ -20,6 +20,7 @@ class Node(object):
                 pygame.draw.circle(screen, RED, self.position.asInt(), 12)
 
 
+
 class NodeGroup(object):
     def __init__(self, level):
         self.level = level
@@ -85,6 +86,8 @@ class NodeGroup(object):
         if key1 in self.nodesLUT.keys() and key2 in self.nodesLUT.keys():
             self.nodesLUT[key1].neighbors[PORTAL] = self.nodesLUT[key2]
             self.nodesLUT[key2].neighbors[PORTAL] = self.nodesLUT[key1]
+
+  
   
     def createHomeNodes(self, xoffset, yoffset):
         homedata = np.array([['.','.','+','.','.'],
@@ -94,21 +97,15 @@ class NodeGroup(object):
                              ['+','.','.','.','+']])
 
         self.createNodeTable(homedata, xoffset, yoffset)
-        print(list(self.nodesLUT.keys()))
         self.connectHorizontally(homedata, xoffset, yoffset)
         self.connectVertically(homedata, xoffset, yoffset)
-        keyhome = self.constructKey(xoffset+2, yoffset)
-        keyleft = self.constructKey(12, 14)
-        keyright = self.constructKey(15, 14)
-        print(keyhome)
-        print(keyleft)
-        print(keyright)
-        self.nodesLUT[keyleft].neighbors[RIGHT] = self.nodesLUT[keyhome]
-        self.nodesLUT[keyright].neighbors[LEFT] = self.nodesLUT[keyhome]
-        self.nodesLUT[keyhome].neighbors[RIGHT] = self.nodesLUT[keyright]
-        self.nodesLUT[keyhome].neighbors[LEFT] = self.nodesLUT[keyleft]
-        
+        return self.constructKey(xoffset+2, yoffset)
 
+    def connectHomeNodes(self, homekey, otherkey, direction):     
+        key = self.constructKey(*otherkey)
+        self.nodesLUT[homekey].neighbors[direction] = self.nodesLUT[key]
+        self.nodesLUT[key].neighbors[direction*-1] = self.nodesLUT[homekey]
+        
     def render(self, screen):
         for node in self.nodesLUT.values():
             node.render(screen)

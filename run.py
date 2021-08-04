@@ -23,7 +23,9 @@ class GameController(object):
     def startGame(self):
         self.nodes = NodeGroup("maze1.txt")
         self.nodes.setPortalPair((0, 17), (27, 17))
-        self.nodes.createHomeNodes(11.5, 14)###
+        homekey = self.nodes.createHomeNodes(11.5, 14)
+        self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
+        self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)
         self.pacman = Pacman(self.nodes.getPacmanNode())
         self.pellets = PelletGroup("maze1_pellets.txt")
         self.ghost = Ghost(self.nodes.getPacmanNode(), self.pacman, self.mode)
@@ -47,6 +49,8 @@ class GameController(object):
         pellet = self.pacman.eatPellets(self.pellets.pelletList)
         if pellet:
             self.pellets.pelletList.remove(pellet)
+            if pellet.name == "powerpellet":
+                self.ghost.startFreight()
            
                 
     def render(self):
