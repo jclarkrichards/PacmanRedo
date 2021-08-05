@@ -5,7 +5,6 @@ from pacman import Pacman
 from nodes import NodeGroup
 from pellets import PelletGroup
 from ghosts import Ghost
-from modes import MainMode
 
 class GameController(object):
     def __init__(self):
@@ -14,7 +13,6 @@ class GameController(object):
         self.background = None
         self.setBackground()
         self.clock = pygame.time.Clock()
-        self.mode = MainMode()
 
     def setBackground(self):
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
@@ -26,17 +24,25 @@ class GameController(object):
         homekey = self.nodes.createHomeNodes(11.5, 14)
         self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
         self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)
+        print(list(self.nodes.nodesLUT.keys()))
+        spawnkey = self.nodes.constructKey(2+11.5, 3+14)###
+        if spawnkey is not None:###
+            self.nodes.nodesLUT[spawnkey].color = WHITE###
+
+
+       
         self.pacman = Pacman(self.nodes.getPacmanNode())
         self.pellets = PelletGroup("maze1_pellets.txt")
-        self.ghost = Ghost(self.nodes.getPacmanNode(), self.pacman, self.mode)
-    
+        self.ghost = Ghost(self.nodes.getPacmanNode(), self.pacman)
+        self.ghost.setSpawnNode(self.nodes.nodesLUT[spawnkey])###
+
     def update(self):
         dt = self.clock.tick(30) / 1000.0
-        self.mode.update(dt)
         self.pacman.update(dt)
         self.ghost.update(dt)
         self.pellets.update(dt)
         self.checkPelletEvents()
+        self.checkGhostEvents()########
         self.checkEvents()
         self.render()
 
@@ -52,6 +58,13 @@ class GameController(object):
             if pellet.name == "powerpellet":
                 self.ghost.startFreight()
            
+    ########
+    def checkGhostEvents(self):
+        if self.pacman.collideGhost(self.ghost):
+            if self.ghost.mode.current is FREIGHT:
+                self.ghost.startSpawn()
+            #if self.ghost.mode.name == "FREIGHT":
+                
                 
     def render(self):
         self.screen.blit(self.background, (0, 0))

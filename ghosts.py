@@ -3,29 +3,28 @@ from pygame.locals import *
 from vector import Vector2
 from constants import *
 from entity import Entity
+from modes import ModeController
 
 
 class Ghost(Entity):
-    def __init__(self, node, pacman=None, mode=None):
+    def __init__(self, node, pacman=None):
         Entity.__init__(self, node)
         self.name = "ghost"
         self.points = 200 
         self.goal = Vector2()
         self.directionMethod = self.goalDirection
         self.pacman = pacman
-        self.mainmode = mode
-        self.othermode = None###
+        self.mode = ModeController(self)
 
     def update(self, dt):
-        if self.othermode is None:####
-            if self.mainmode.mode is SCATTER:
-                self.scatter()
-            elif self.mainmode.mode is CHASE:
-                self.chase()
-        else:###
-            self.timer += dt###
-            if self.timer >= self.modetime:###
-                self.normalMode()####
+        self.mode.update(dt)
+
+        if self.mode.current is SCATTER:
+            self.scatter()
+        elif self.mode.current is CHASE:
+            self.chase()
+
+        
 
         Entity.update(self, dt)
 
@@ -35,24 +34,35 @@ class Ghost(Entity):
     def chase(self):
         self.goal = self.pacman.position
 
-    ####
+    def spawn(self):####
+        self.goal = self.spawnNode.position####
+
+    def setSpawnNode(self, node):###
+        self.spawnNode = node###
+        print("SPAWN node at " + str(self.spawnNode.position))
+
     def startFreight(self):
-        if self.mainmode.mode in [SCATTER, CHASE]:
+        self.mode.setFreightMode()
+        if self.mode.current == FREIGHT:
             print("Start freight mode")
-            self.othermode = FREIGHT
             self.speed = 50
-            self.directionMethod = self.randomDirection
-            self.modetime = 7
-            self.timer = 0
-        elif self.mainmode.mode is FREIGHT:
-            self.timer = 0
+            self.directionMethod = self.randomDirection         
         self.points = 200
+
+    #####
+    def startSpawn(self):
+        self.mode.setSpawnMode()
+        if self.mode.current == SPAWN:
+            self.speed = 150
+            self.directionMethod = self.goalDirection
+            self.spawn()
+
+    #####
 
     def normalMode(self):
         self.speed = 100
         self.directionMethod = self.goalDirection
-        self.othermode = None
-    ####
+    
 
 
       

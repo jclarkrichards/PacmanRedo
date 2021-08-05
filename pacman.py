@@ -50,4 +50,13 @@ class Pacman(Entity):
             rSquared = (pellet.radius+self.collideRadius)**2
             if dSquared <= rSquared:
                 return pellet
-        return None                  
+        return None    
+    
+    #########
+    def collideGhost(self, ghost):
+        d = self.position - ghost.position
+        dSquared = d.magnitudeSquared()
+        rSquared = (self.collideRadius + ghost.collideRadius)**2
+        if dSquared <= rSquared:
+            return True
+        return False

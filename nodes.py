@@ -7,6 +7,7 @@ class Node(object):
     def __init__(self, x, y):
         self.position = Vector2(x, y)
         self.neighbors = {UP:None, DOWN:None, LEFT:None, RIGHT:None, PORTAL:None}
+        self.color = RED###temp thing
         
     def __str__(self):
         return "NODE at (" + str(self.x) + ", " + str(self.y)+")"
@@ -17,7 +18,7 @@ class Node(object):
                 line_start = self.position.asTuple()
                 line_end = self.neighbors[n].position.asTuple()
                 pygame.draw.line(screen, WHITE, line_start, line_end, 4)
-                pygame.draw.circle(screen, RED, self.position.asInt(), 12)
+                pygame.draw.circle(screen, self.color, self.position.asInt(), 12)
 
 
 
