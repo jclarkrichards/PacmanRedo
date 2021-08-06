@@ -25,16 +25,11 @@ class GameController(object):
         self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
         self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)
         print(list(self.nodes.nodesLUT.keys()))
-        spawnkey = self.nodes.constructKey(2+11.5, 3+14)###
-        if spawnkey is not None:###
-            self.nodes.nodesLUT[spawnkey].color = WHITE###
-
-
-       
+        spawnkey = self.nodes.constructKey(2+11.5, 3+14)     
         self.pacman = Pacman(self.nodes.getPacmanNode())
         self.pellets = PelletGroup("maze1_pellets.txt")
         self.ghost = Ghost(self.nodes.getPacmanNode(), self.pacman)
-        self.ghost.setSpawnNode(self.nodes.nodesLUT[spawnkey])###
+        self.ghost.setSpawnNode(self.nodes.nodesLUT[spawnkey])
 
     def update(self):
         dt = self.clock.tick(30) / 1000.0
@@ -42,7 +37,7 @@ class GameController(object):
         self.ghost.update(dt)
         self.pellets.update(dt)
         self.checkPelletEvents()
-        self.checkGhostEvents()########
+        self.checkGhostEvents()
         self.checkEvents()
         self.render()
 
@@ -58,12 +53,11 @@ class GameController(object):
             if pellet.name == "powerpellet":
                 self.ghost.startFreight()
            
-    ########
     def checkGhostEvents(self):
         if self.pacman.collideGhost(self.ghost):
             if self.ghost.mode.current is FREIGHT:
                 self.ghost.startSpawn()
-            #if self.ghost.mode.name == "FREIGHT":
+           
                 
                 
     def render(self):

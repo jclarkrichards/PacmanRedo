@@ -34,11 +34,11 @@ class Ghost(Entity):
     def chase(self):
         self.goal = self.pacman.position
 
-    def spawn(self):####
-        self.goal = self.spawnNode.position####
+    def spawn(self):
+        self.goal = self.spawnNode.position
 
-    def setSpawnNode(self, node):###
-        self.spawnNode = node###
+    def setSpawnNode(self, node):
+        self.spawnNode = node
         print("SPAWN node at " + str(self.spawnNode.position))
 
     def startFreight(self):
@@ -49,15 +49,12 @@ class Ghost(Entity):
             self.directionMethod = self.randomDirection         
         self.points = 200
 
-    #####
     def startSpawn(self):
         self.mode.setSpawnMode()
         if self.mode.current == SPAWN:
             self.speed = 150
             self.directionMethod = self.goalDirection
             self.spawn()
-
-    #####
 
     def normalMode(self):
         self.speed = 100
