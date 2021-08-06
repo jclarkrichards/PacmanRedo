@@ -41,14 +41,14 @@ class ModeController(object):
                 self.time = None
                 self.entity.normalMode()
                 self.current = self.mainmode.mode
-        elif self.current in [SCATTER, CHASE]:######
+        elif self.current in [SCATTER, CHASE]:
             self.current = self.mainmode.mode
 
-        if self.current is SPAWN:#######
-            if self.entity.node == self.entity.spawnNode:#######
+        if self.current is SPAWN:
+            if self.entity.node == self.entity.spawnNode:
                 print("Arrived at spawn point!")
-                self.entity.normalMode()#######
-                self.current = self.mainmode.mode#######
+                self.entity.normalMode()
+                self.current = self.mainmode.mode
         
         #print(self.current)
 
@@ -60,9 +60,9 @@ class ModeController(object):
         elif self.current is FREIGHT:
             self.timer = 0
 
-    ######
     def setSpawnMode(self):
-        self.current = SPAWN
+        if self.current is FREIGHT:
+            self.current = SPAWN
           
        
 
