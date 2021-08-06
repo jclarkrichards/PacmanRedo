@@ -14,11 +14,12 @@ class Entity(object):
         self.radius = 10
         self.collideRadius = 5
         self.color = WHITE
-        self.node = node
-        self.setPosition()
-        self.target = node
+        #self.node = node###
+        #self.setPosition()###
+        #self.target = node###
         self.visible = True
         self.directionMethod = self.randomDirection
+        self.setStartNode(node)###
 
     def setPosition(self):
         self.position = self.node.position.copy()
@@ -96,6 +97,13 @@ class Entity(object):
         
         index = distances.index(min(distances))
         return directions[index]
+
+    ###
+    def setStartNode(self, node):###
+        self.node = node###
+        self.startNode = node###
+        self.target = node###
+        self.setPosition()###
 
     def render(self, screen):
         if self.visible:
