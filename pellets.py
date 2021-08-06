@@ -5,7 +5,7 @@ import numpy as np
 
 class Pellet(object):
     def __init__(self, row, column):
-        self.name = "pellet"
+        self.name = PELLET####
         self.position = Vector2(column*TILEHEIGHT, row*TILEWIDTH)
         self.color = WHITE
         self.radius = 4
@@ -22,7 +22,7 @@ class Pellet(object):
 class PowerPellet(Pellet):
     def __init__(self, row, column):
         Pellet.__init__(self, row, column)
-        self.name = "powerpellet"
+        self.name = POWERPELLET#####
         self.radius = 8
         self.points = 50
         self.flashTime = 0.2

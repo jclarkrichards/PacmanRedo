@@ -24,8 +24,12 @@ class GameController(object):
         homekey = self.nodes.createHomeNodes(11.5, 14)
         self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
         self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)
-        print(list(self.nodes.nodesLUT.keys()))
-        spawnkey = self.nodes.constructKey(2+11.5, 3+14)     
+        #print(list(self.nodes.nodesLUT.keys()))
+        homekey = self.nodes.constructKey(2+11.5, 0+14)
+        self.nodes.nodesLUT[homekey].access[DOWN].remove(PACMAN)####Pacman can't move down on this node
+        spawnkey = self.nodes.constructKey(2+11.5, 3+14)    
+        self.nodes.nodesLUT[spawnkey].access[LEFT] = []####
+        self.nodes.nodesLUT[spawnkey].access[RIGHT] = []#####
         self.pacman = Pacman(self.nodes.getPacmanNode())
         self.pellets = PelletGroup("maze1_pellets.txt")
         self.ghost = Ghost(self.nodes.getPacmanNode(), self.pacman)
@@ -50,7 +54,7 @@ class GameController(object):
         pellet = self.pacman.eatPellets(self.pellets.pelletList)
         if pellet:
             self.pellets.pelletList.remove(pellet)
-            if pellet.name == "powerpellet":
+            if pellet.name is POWERPELLET:#####
                 self.ghost.startFreight()
            
     def checkGhostEvents(self):

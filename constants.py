@@ -24,3 +24,9 @@ CHASE = 1
 FREIGHT = 2
 SPAWN = 3
 FOLLOW = 4
+
+#Use instead of strings and also in lists
+PACMAN = 0
+GHOST = 1
+PELLET = 2
+POWERPELLET = 3

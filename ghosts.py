@@ -9,7 +9,7 @@ from modes import ModeController
 class Ghost(Entity):
     def __init__(self, node, pacman=None):
         Entity.__init__(self, node)
-        self.name = "ghost"
+        self.name = GHOST####
         self.points = 200 
         self.goal = Vector2()
         self.directionMethod = self.goalDirection

@@ -7,7 +7,7 @@ from entity import Entity
 class Pacman(Entity):
     def __init__(self, node):
         Entity.__init__(self, node)
-        self.name = "pacman"
+        self.name = PACMAN####
         self.color = YELLOW  
         
     def update(self, dt):

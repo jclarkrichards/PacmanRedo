@@ -7,6 +7,7 @@ class Node(object):
     def __init__(self, x, y):
         self.position = Vector2(x, y)
         self.neighbors = {UP:None, DOWN:None, LEFT:None, RIGHT:None, PORTAL:None}
+        self.access = {UP:[PACMAN, GHOST], DOWN:[PACMAN, GHOST], LEFT:[PACMAN, GHOST], RIGHT:[PACMAN, GHOST]}####Each node gives access for entities to pass in any particular direction
         self.color = RED###temp thing
         
     def __str__(self):
@@ -106,6 +107,8 @@ class NodeGroup(object):
         key = self.constructKey(*otherkey)
         self.nodesLUT[homekey].neighbors[direction] = self.nodesLUT[key]
         self.nodesLUT[key].neighbors[direction*-1] = self.nodesLUT[homekey]
+
+
         
     def render(self, screen):
         for node in self.nodesLUT.values():
