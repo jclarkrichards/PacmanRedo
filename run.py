@@ -5,6 +5,7 @@ from pacman import Pacman
 from nodes import NodeGroup
 from pellets import PelletGroup
 from ghosts import GhostGroup
+from fruit import Fruit###
 
 class GameController(object):
     def __init__(self):
@@ -13,6 +14,7 @@ class GameController(object):
         self.background = None
         self.setBackground()
         self.clock = pygame.time.Clock()
+        self.fruit = None####
 
     def setBackground(self):
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
@@ -42,9 +44,9 @@ class GameController(object):
         self.ghosts.inky.setStartNode(self.nodes.nodesLUT[inkystartkey])
         self.ghosts.clyde.setStartNode(self.nodes.nodesLUT[clydestartkey])
 
-        print("Inky")
-        print(self.ghosts.inky.startNode.position.asTuple())
-        print(inkystartkey)
+        #print("Inky")
+        #print(self.ghosts.inky.startNode.position.asTuple())
+        #print(inkystartkey)
         self.ghosts.inky.startNode.denyAccess(RIGHT, self.ghosts.inky)
         self.ghosts.clyde.startNode.denyAccess(LEFT, self.ghosts.clyde)
 
@@ -57,8 +59,11 @@ class GameController(object):
         self.pacman.update(dt)
         self.ghosts.update(dt)
         self.pellets.update(dt)
+        if self.fruit is not None:###
+            self.fruit.update(dt)####
         self.checkPelletEvents()
         self.checkGhostEvents()
+        self.checkFruitEvents()####
         self.checkEvents()
         self.render()
 
@@ -75,6 +80,7 @@ class GameController(object):
                 self.ghosts.inky.startNode.allowAccess(RIGHT, self.ghosts.inky)
             if self.pellets.numEaten == 70:
                 self.ghosts.clyde.startNode.allowAccess(LEFT, self.ghosts.clyde)
+
             self.pellets.pelletList.remove(pellet)
             if pellet.name is POWERPELLET:
                 self.ghosts.startFreight()
@@ -85,12 +91,22 @@ class GameController(object):
                 if ghost.mode.current is FREIGHT:
                     ghost.startSpawn()
            
-                
-                
+    ####
+    def checkFruitEvents(self):
+        if self.pellets.numEaten == 50 or self.pellets.numEaten == 140:
+            if self.fruit is None:
+                nodekey = self.nodes.constructKey(9, 20)
+                self.fruit = Fruit(self.nodes.nodesLUT[nodekey])
+        if self.fruit is not None:
+            if self.pacman.collideCheck(self.fruit) or self.fruit.destroy:
+                self.fruit = None
+    ####            
     def render(self):
         self.screen.blit(self.background, (0, 0))
         self.nodes.render(self.screen)
         self.pellets.render(self.screen)
+        if self.fruit is not None:###
+            self.fruit.render(self.screen)####
         self.pacman.render(self.screen)
         self.ghosts.render(self.screen)
         pygame.display.update()

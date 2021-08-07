@@ -14,7 +14,7 @@ class Node(object):
         self.color = RED###temp thing
         
     def __str__(self):
-        return "NODE at (" + str(self.x) + ", " + str(self.y)+")"
+        return "NODE at (" + str(self.position.x) + ", " + str(self.position.y)+")"
 
     def denyAccess(self, direction, entity):
         if entity.name in self.access[direction]:

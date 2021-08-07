@@ -101,6 +101,13 @@ class Entity(object):
         self.target = node
         self.setPosition()
 
+    ####
+    def setBetweenNodes(self, direction):
+        if self.node.neighbors[direction] is not None:
+            self.target = self.node.neighbors[direction]
+            self.position = (self.node.position + self.target.position) / 2.0
+    ####
+
     def render(self, screen):
         if self.visible:
             p = self.position.asInt()
