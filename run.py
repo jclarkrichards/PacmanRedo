@@ -24,26 +24,29 @@ class GameController(object):
         homekey = self.nodes.createHomeNodes(11.5, 14)
         self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
         self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)
-        #print(list(self.nodes.nodesLUT.keys()))
-
         spawnkey = self.nodes.constructKey(2+11.5, 3+14) 
         
-        pacstartkey = self.nodes.constructKey(15, 26)###
-        #self.pacman = Pacman(self.nodes.getPacmanNode())####
-        self.pacman = Pacman(self.nodes.nodesLUT[pacstartkey])####
+        pacstartkey = self.nodes.constructKey(15, 26)
+        self.pacman = Pacman(self.nodes.nodesLUT[pacstartkey])
 
         self.pellets = PelletGroup("maze1_pellets.txt")
         self.ghosts = GhostGroup(self.nodes.getDefaultNode(), self.pacman)
         self.ghosts.setSpawnNode(self.nodes.nodesLUT[spawnkey])
 
-        blinkystartkey = self.nodes.constructKey(2+11.5, 0+14)###
-        pinkystartkey = self.nodes.constructKey(2+11.5, 3+14)###
-        inkystartkey = self.nodes.constructKey(0+11.5, 3+14)###
-        clydestartkey = self.nodes.constructKey(4+11.5, 3+14)###
-        self.ghosts.blinky.setStartNode(self.nodes.nodesLUT[blinkystartkey])####
-        self.ghosts.pinky.setStartNode(self.nodes.nodesLUT[pinkystartkey])####
-        self.ghosts.inky.setStartNode(self.nodes.nodesLUT[inkystartkey])####
-        self.ghosts.clyde.setStartNode(self.nodes.nodesLUT[clydestartkey])####
+        blinkystartkey = self.nodes.constructKey(2+11.5, 0+14)
+        pinkystartkey = self.nodes.constructKey(2+11.5, 3+14)
+        inkystartkey = self.nodes.constructKey(0+11.5, 3+14)
+        clydestartkey = self.nodes.constructKey(4+11.5, 3+14)
+        self.ghosts.blinky.setStartNode(self.nodes.nodesLUT[blinkystartkey])
+        self.ghosts.pinky.setStartNode(self.nodes.nodesLUT[pinkystartkey])
+        self.ghosts.inky.setStartNode(self.nodes.nodesLUT[inkystartkey])
+        self.ghosts.clyde.setStartNode(self.nodes.nodesLUT[clydestartkey])
+
+        print("Inky")
+        print(self.ghosts.inky.startNode.position.asTuple())
+        print(inkystartkey)
+        self.ghosts.inky.startNode.denyAccess(RIGHT, self.ghosts.inky)
+        self.ghosts.clyde.startNode.denyAccess(LEFT, self.ghosts.clyde)
 
         self.nodes.denyAccess(2+11.5, 0+14, DOWN, self.pacman)
         self.nodes.denyAccessList(2+11.5, 3+14, LEFT, self.ghosts)
@@ -67,6 +70,11 @@ class GameController(object):
     def checkPelletEvents(self):
         pellet = self.pacman.eatPellets(self.pellets.pelletList)
         if pellet:
+            self.pellets.numEaten += 1
+            if self.pellets.numEaten == 30:
+                self.ghosts.inky.startNode.allowAccess(RIGHT, self.ghosts.inky)
+            if self.pellets.numEaten == 70:
+                self.ghosts.clyde.startNode.allowAccess(LEFT, self.ghosts.clyde)
             self.pellets.pelletList.remove(pellet)
             if pellet.name is POWERPELLET:
                 self.ghosts.startFreight()

@@ -7,14 +7,22 @@ class Node(object):
     def __init__(self, x, y):
         self.position = Vector2(x, y)
         self.neighbors = {UP:None, DOWN:None, LEFT:None, RIGHT:None, PORTAL:None}
-        self.access = {UP:[PACMAN, BLINKY, PINKY, INKY, CLYDE], ###
-                       DOWN:[PACMAN, BLINKY, PINKY, INKY, CLYDE], ###
-                       LEFT:[PACMAN, BLINKY, PINKY, INKY, CLYDE], ###
+        self.access = {UP:[PACMAN, BLINKY, PINKY, INKY, CLYDE], 
+                       DOWN:[PACMAN, BLINKY, PINKY, INKY, CLYDE], 
+                       LEFT:[PACMAN, BLINKY, PINKY, INKY, CLYDE], 
                        RIGHT:[PACMAN, BLINKY, PINKY, INKY, CLYDE]}#Each node gives access for entities to pass in any particular direction
         self.color = RED###temp thing
         
     def __str__(self):
         return "NODE at (" + str(self.x) + ", " + str(self.y)+")"
+
+    def denyAccess(self, direction, entity):
+        if entity.name in self.access[direction]:
+            self.access[direction].remove(entity.name)
+
+    def allowAccess(self, direction, entity):
+        if entity.name not in self.access[direction]:
+            self.access[direction].append(entity.name)
 
     def render(self, screen):
         for n in self.neighbors.keys():
@@ -114,28 +122,20 @@ class NodeGroup(object):
     def denyAccess(self, nodex, nodey, direction, entity):
         key = self.constructKey(nodex, nodey)
         if key is not None:
-            if entity.name in self.nodesLUT[key].access[direction]:
-                self.nodesLUT[key].access[direction].remove(entity.name)
+            self.nodesLUT[key].denyAccess(direction, entity)
 
     def allowAccess(self, nodex, nodey, direction, entity):
         key = self.constructKey(nodex, nodey)
         if key is not None:
-            if entity.name not in self.nodesLUT[key].access[direction]:
-                self.nodesLUT[key].access[direction].append(entity.name)
+            self.nodesLUT[key].allowAccess(direction, entity)
 
     def denyAccessList(self, nodex, nodey, direction, entities):
-        key = self.constructKey(nodex, nodey)
-        if key is not None:
-            for entity in entities:
-                if entity.name in self.nodesLUT[key].access[direction]:
-                    self.nodesLUT[key].access[direction].remove(entity.name)
+        for entity in entities:
+            self.denyAccess(nodex, nodey, direction, entity)
 
     def allowAccessList(self, nodex, nodey, direction, entities):
-        key = self.constructKey(nodex, nodey)
-        if key is not None:
-            for entity in entities:
-                if entity.name not in self.nodesLUT[key].access[direction]:
-                    self.nodesLUT[key].access[direction].append(entity.name)
+        for entity in entities:
+            self.allowAccess(nodex, nodey, direction, entity)
         
     def render(self, screen):
         for node in self.nodesLUT.values():
