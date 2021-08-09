@@ -9,7 +9,14 @@ class Pacman(Entity):
         Entity.__init__(self, node)
         self.name = PACMAN
         self.color = YELLOW  
-        self.direction = LEFT####
+        self.direction = LEFT
+        self.setBetweenNodes(LEFT)
+
+    ####
+    def reset(self):
+        Entity.reset(self)
+        self.direction = LEFT
+        self.setBetweenNodes(LEFT)####
         
     def update(self, dt):
         self.position += self.directions[self.direction]*self.speed*dt
