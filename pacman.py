@@ -10,6 +10,12 @@ class Pacman(Entity):
         self.name = PACMAN
         self.color = YELLOW  
         self.direction = LEFT
+        self.setBetweenNodes(LEFT)
+
+    ####
+    def reset(self):
+        Entity.reset(self)
+        self.direction = LEFT
         self.setBetweenNodes(LEFT)####
         
     def update(self, dt):
