@@ -12,11 +12,11 @@ class Pacman(Entity):
         self.direction = LEFT
         self.setBetweenNodes(LEFT)
 
-    ####
+    
     def reset(self):
         Entity.reset(self)
         self.direction = LEFT
-        self.setBetweenNodes(LEFT)####
+        self.setBetweenNodes(LEFT)
         
     def update(self, dt):
         self.position += self.directions[self.direction]*self.speed*dt
