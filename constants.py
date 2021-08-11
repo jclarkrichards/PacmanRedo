@@ -39,3 +39,10 @@ PINKY = 5
 INKY = 6
 CLYDE = 7
 FRUIT = 8
+
+#Text that needs updating
+SCORETXT = 0
+LEVELTXT = 1
+READYTXT = 2
+PAUSETXT = 3
+GAMEOVERTXT = 4

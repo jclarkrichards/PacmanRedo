@@ -7,6 +7,7 @@ from pellets import PelletGroup
 from ghosts import GhostGroup
 from fruit import Fruit
 from pauser import Pause
+from text import TextGroup
 
 class GameController(object):
     def __init__(self):
@@ -18,7 +19,9 @@ class GameController(object):
         self.fruit = None
         self.pause = Pause(True)
         self.level = 1
-        self.lives = 5###
+        self.lives = 2
+        self.score = 0
+        self.textgroup = TextGroup(self.level)
 
     def setBackground(self):
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
@@ -57,6 +60,7 @@ class GameController(object):
 
     def update(self):
         dt = self.clock.tick(30) / 1000.0
+        self.textgroup.update(dt)
         if not self.pause.paused:
             self.pacman.update(dt)
             self.ghosts.update(dt)
@@ -79,10 +83,15 @@ class GameController(object):
             elif event.type == KEYDOWN:
                 if event.key == K_SPACE:
                     self.pause.setPause(playerPaused=True)
+                    if not self.pause.paused:
+                        self.textgroup.hideText()
+                    else:
+                        self.textgroup.showText(PAUSETXT)
 
     def checkPelletEvents(self):
         pellet = self.pacman.eatPellets(self.pellets.pelletList)
         if pellet:
+            self.updateScore(pellet.points)
             self.pellets.numEaten += 1
             if self.pellets.numEaten == 30:
                 self.ghosts.inky.startNode.allowAccess(RIGHT, self.ghosts.inky)
@@ -100,15 +109,20 @@ class GameController(object):
         for ghost in self.ghosts:
             if self.pacman.collideGhost(ghost):
                 if ghost.mode.current is FREIGHT:
+                    self.updateScore(ghost.points)
+                    
+                    self.textgroup.addText(str(ghost.points), WHITE, ghost.position.x, ghost.position.y, 8, time=1)
+                    self.ghosts.updatePoints()
                     self.pause.setPause(pauseTime=1)
                     ghost.startSpawn()
-                elif ghost.mode.current is not SPAWN:####
+                elif ghost.mode.current is not SPAWN:
                     print("PACMAN DEAD")
-                    self.lives -=  1####
-                    if self.lives <= 0:####
-                        self.pause.setPause(pauseTime=3, func=self.restartGame)####
-                    else:###
-                        self.pause.setPause(pauseTime=3, func=self.resetLevel)####
+                    self.lives -=  1
+                    if self.lives <= 0:
+                        self.textgroup.showText(GAMEOVERTXT)
+                        self.pause.setPause(pauseTime=3, func=self.restartGame)
+                    else:
+                        self.pause.setPause(pauseTime=3, func=self.resetLevel)
            
     
     def checkFruitEvents(self):
@@ -117,7 +131,13 @@ class GameController(object):
                 nodekey = self.nodes.constructKey(9, 20)
                 self.fruit = Fruit(self.nodes.nodesLUT[nodekey])
         if self.fruit is not None:
-            if self.pacman.collideCheck(self.fruit) or self.fruit.destroy:
+            if self.pacman.collideCheck(self.fruit):
+                
+                self.updateScore(self.fruit.points)
+                self.textgroup.addText(str(self.fruit.points), WHITE, self.fruit.position.x, self.fruit.position.y, 8, time=1)
+                self.fruit = None
+                
+            elif self.fruit.destroy:
                 self.fruit = None
 
     
@@ -126,7 +146,7 @@ class GameController(object):
         self.pause.paused = True
         self.startGame()
 
-    ####
+    
     def restartGame(self):
         print("Restart Game")
         self.lives = 5
@@ -134,6 +154,7 @@ class GameController(object):
         self.pause.paused = True
         self.fruit = None
         self.startGame()
+        self.textgroup.showText(READYTXT)
 
     def resetLevel(self):
         print("Reset " + str(self.lives) + " lives left")
@@ -141,7 +162,12 @@ class GameController(object):
         self.pacman.reset()
         self.ghosts.reset()
         self.fruit = None
-        ####
+        self.textgroup.showText(READYTXT)
+
+    
+    def updateScore(self, points):
+        self.score += points
+        self.textgroup.updateScore(self.score)
     
     def render(self):
         self.screen.blit(self.background, (0, 0))
@@ -151,6 +177,7 @@ class GameController(object):
             self.fruit.render(self.screen)
         self.pacman.render(self.screen)
         self.ghosts.render(self.screen)
+        self.textgroup.render(self.screen)
         pygame.display.update()
 
 

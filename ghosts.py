@@ -18,11 +18,11 @@ class Ghost(Entity):
         self.blinky = blinky
         self.homeNode = node
 
-    ####
+    
     def reset(self):
         Entity.reset(self)
         self.points = 200
-        self.directionMethod = self.goalDirection####
+        self.directionMethod = self.goalDirection
 
     def update(self, dt):
         self.mode.update(dt)
@@ -160,11 +160,11 @@ class GhostGroup(object):
         for ghost in self:
             ghost.visible = False
 
-    ####
+    
     def reset(self):
         for ghost in self:
             ghost.reset()
-            ####
+           
 
     def render(self, screen):
         for ghost in self:
