@@ -8,6 +8,7 @@ from ghosts import GhostGroup
 from fruit import Fruit
 from pauser import Pause
 from text import TextGroup
+#from sprites import Spritesheet#####
 
 class GameController(object):
     def __init__(self):
@@ -22,6 +23,7 @@ class GameController(object):
         self.lives = 2
         self.score = 0
         self.textgroup = TextGroup(self.level)
+        #self.sheet = Spritesheet()#####
 
     def setBackground(self):
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
@@ -57,6 +59,8 @@ class GameController(object):
         self.nodes.denyAccess(2+11.5, 0+14, DOWN, self.pacman)
         self.nodes.denyAccessList(2+11.5, 3+14, LEFT, self.ghosts)
         self.nodes.denyAccessList(2+11.5, 3+14, RIGHT, self.ghosts)
+
+        #self.pacman.image = self.sheet.getImage(0, 1, 32, 32)#####Just so as example for section
 
     def update(self):
         dt = self.clock.tick(30) / 1000.0

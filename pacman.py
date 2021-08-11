@@ -3,6 +3,7 @@ from pygame.locals import *
 from vector import Vector2
 from constants import *
 from entity import Entity
+from sprites import PacmanSprites###
 
 class Pacman(Entity):
     def __init__(self, node):
@@ -11,7 +12,8 @@ class Pacman(Entity):
         self.color = YELLOW  
         self.direction = LEFT
         self.setBetweenNodes(LEFT)
-
+        self.sprites = PacmanSprites()####
+        self.image = self.sprites.getStartImage()#####For an initial image
     
     def reset(self):
         Entity.reset(self)

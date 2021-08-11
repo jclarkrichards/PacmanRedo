@@ -17,6 +17,7 @@ class Entity(object):
         self.visible = True
         self.directionMethod = self.randomDirection
         self.setStartNode(node)
+        self.image = None#####
 
     def setPosition(self):
         self.position = self.node.position.copy()
@@ -27,7 +28,6 @@ class Entity(object):
         if self.overshotTarget():
             self.node = self.target
             directions = self.validDirections()
-            #print("Valid: " + str(directions))
             direction = self.directionMethod(directions)
             
             if self.node.neighbors[PORTAL] is not None:
@@ -117,7 +117,10 @@ class Entity(object):
 
     def render(self, screen):
         if self.visible:
-            p = self.position.asInt()
-            pygame.draw.circle(screen, self.color, p, self.radius)
+            if self.image is not None:####
+                screen.blit(self.image, self.position.asTuple())#####
+            else:#####
+                p = self.position.asInt()
+                pygame.draw.circle(screen, self.color, p, self.radius)
 
                         
