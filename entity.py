@@ -17,7 +17,7 @@ class Entity(object):
         self.visible = True
         self.directionMethod = self.randomDirection
         self.setStartNode(node)
-        self.image = None#####
+        self.image = None
 
     def setPosition(self):
         self.position = self.node.position.copy()
@@ -117,9 +117,9 @@ class Entity(object):
 
     def render(self, screen):
         if self.visible:
-            if self.image is not None:####
-                screen.blit(self.image, self.position.asTuple())#####
-            else:#####
+            if self.image is not None:
+                screen.blit(self.image, self.position.asTuple())
+            else:
                 p = self.position.asInt()
                 pygame.draw.circle(screen, self.color, p, self.radius)
 

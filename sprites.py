@@ -23,7 +23,7 @@ class Spritesheet(object):
 class PacmanSprites(Spritesheet):
     def __init__(self):
         Spritesheet.__init__(self)
-        self.test = (0, 1)
+        self.image = self.getStartImage()
 
     def getStartImage(self):
         return self.getImage(8, 0)
@@ -35,12 +35,40 @@ class PacmanSprites(Spritesheet):
 class GhostSprites(Spritesheet):
     def __init__(self, ghostname):
         Spritesheet.__init__(self)
-        self.test = (0, 1)
         self.y = {BLINKY:4, PINKY:6, INKY:8, CLYDE:10}
         self.ghostname = ghostname
+        self.image = self.getStartImage()
 
     def getStartImage(self):
         return self.getImage(0, self.y[self.ghostname])
+
+    def getImage(self, x, y):
+        return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
+
+
+class FruitSprites(Spritesheet):
+    def __init__(self):
+        Spritesheet.__init__(self)
+        self.image = self.getStartImage()
+
+    def getStartImage(self):
+        return self.getImage(16, 4)
+
+    def getImage(self, x, y):
+        return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
+
+
+##########
+class LifeSprites(Spritesheet):
+    def __init__(self, numlives):
+        Spritesheet.__init__(self)
+        self.images = []
+        for i in range(numlives):
+            self.images.append(self.getImage(0,0))
+
+    def removeImage(self):
+        if len(self.images) > 0:
+            self.images.pop(0)
 
     def getImage(self, x, y):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
