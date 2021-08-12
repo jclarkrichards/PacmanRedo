@@ -183,8 +183,8 @@ class GameController(object):
         self.textgroup.render(self.screen)
 
         for i in range(len(self.lifesprites.images)):######
-            x = 10 + 42 * i####
-            y = TILEHEIGHT * NROWS - 32#####
+            x = self.lifesprites.images[i].get_width() * i####
+            y = SCREENHEIGHT - self.lifesprites.images[i].get_height()#####
             self.screen.blit(self.lifesprites.images[i], (x, y))######
 
         pygame.display.update()
