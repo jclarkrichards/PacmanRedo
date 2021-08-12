@@ -82,7 +82,6 @@ class FruitSprites(Spritesheet):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
 
 
-##########
 class LifeSprites(Spritesheet):
     def __init__(self, numlives):
         Spritesheet.__init__(self)
@@ -96,6 +95,13 @@ class LifeSprites(Spritesheet):
 
     def getImage(self, x, y):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
+
+#############Mazes
+class MazeSprites(Spritesheet):
+    def __init__(self, mazefile):
+        Spritesheet.__init__(self)
+        self.file = mazefile
+
 
 
 
