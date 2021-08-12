@@ -1,10 +1,13 @@
-class Animation(object):
-    def __init__(self, animType):
+from constants import *
+
+class Animator(object):
+    def __init__(self, animType, frames=[]):
         self.animType = animType
-        self.frames = []
+        self.frames = frames
+        print(self.frames)
         self.current_frame = 0
         self.finished = False
-        self.speed = 0
+        self.speed = 20
         self.dt = 0
 
     def reset(self):
@@ -15,12 +18,12 @@ class Animation(object):
         self.frames.append(frame)
 
     def update(self, dt):
-        if self.animType == "loop":
+        if self.animType == LOOPANIM:
             self.loop(dt)
-        elif self.animType == "once":
-            self.once(dt)
-        elif self.animType == "static":
-            self.current_frame = 0
+        elif self.animType == ONETIMEANIM:
+            self.onepass(dt)
+        #elif self.animType == "static":
+        #    self.current_frame = 0
         return self.frames[self.current_frame]
 
     def nextFrame(self, dt):
@@ -34,7 +37,7 @@ class Animation(object):
         if self.current_frame == len(self.frames):
             self.current_frame = 0
 
-    def once(self, dt):
+    def onepass(self, dt):
         if not self.finished:
             self.nextFrame(dt)
             if self.current_frame == len(self.frames) - 1:

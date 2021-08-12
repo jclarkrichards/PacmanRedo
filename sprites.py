@@ -1,5 +1,6 @@
 import pygame
 from constants import *
+from animation import Animator######Animation
 
 BASETILEWIDTH = 16
 BASETILEHEIGHT = 16
@@ -21,9 +22,32 @@ class Spritesheet(object):
 
     
 class PacmanSprites(Spritesheet):
-    def __init__(self):
+    def __init__(self, entity):
         Spritesheet.__init__(self)
         self.image = self.getStartImage()
+        self.entity = entity####testing
+        self.animations = {}###########Animations
+        self.defineAnimations()############
+
+    ############Animations
+    def defineAnimations(self):
+        self.animations[LEFT] = Animator(LOOPANIM, ((8,0), (0, 0), (0, 2), (0, 0)))
+        self.animations[RIGHT] = Animator(LOOPANIM, ((8,0), (2, 0), (2, 2), (2, 0)))
+        self.animations[UP] = Animator(LOOPANIM, ((8,0), (6, 0), (6, 2), (6, 0)))
+        self.animations[DOWN] = Animator(LOOPANIM, ((8,0), (4, 0), (4, 2), (4, 0)))
+
+    def update(self, dt):############Animation
+        if self.entity.direction == LEFT:
+            self.image = self.getImage(*self.animations[LEFT].update(dt))
+        elif self.entity.direction == RIGHT:
+            self.image = self.getImage(*self.animations[RIGHT].update(dt))
+        elif self.entity.direction == DOWN:
+            self.image = self.getImage(*self.animations[DOWN].update(dt))
+        elif self.entity.direction == UP:
+            self.image = self.getImage(*self.animations[UP].update(dt))
+        elif self.entity.direction == STOP:
+            self.image = self.getImage(8, 0)
+    #######
 
     def getStartImage(self):
         return self.getImage(8, 0)
@@ -58,7 +82,6 @@ class FruitSprites(Spritesheet):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
 
 
-##########
 class LifeSprites(Spritesheet):
     def __init__(self, numlives):
         Spritesheet.__init__(self)
@@ -72,6 +95,13 @@ class LifeSprites(Spritesheet):
 
     def getImage(self, x, y):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
+
+#############Mazes
+class MazeSprites(Spritesheet):
+    def __init__(self, mazefile):
+        Spritesheet.__init__(self)
+        self.file = mazefile
+
 
 
 

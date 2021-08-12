@@ -46,3 +46,8 @@ LEVELTXT = 1
 READYTXT = 2
 PAUSETXT = 3
 GAMEOVERTXT = 4
+
+
+#Animation Types
+LOOPANIM = 0##########
+ONETIMEANIM = 1###########

@@ -169,13 +169,11 @@ class GhostGroup(object):
     def hide(self):
         for ghost in self:
             ghost.visible = False
-
-    
+  
     def reset(self):
         for ghost in self:
             ghost.reset()
            
-
     def render(self, screen):
         for ghost in self:
             #ghost.image = ghost.sprites.image####

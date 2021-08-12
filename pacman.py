@@ -12,7 +12,7 @@ class Pacman(Entity):
         self.color = YELLOW  
         self.direction = LEFT
         self.setBetweenNodes(LEFT)
-        self.sprites = PacmanSprites()
+        self.sprites = PacmanSprites(self)
         self.image = self.sprites.image
     
     def reset(self):
@@ -21,6 +21,7 @@ class Pacman(Entity):
         self.setBetweenNodes(LEFT)
         
     def update(self, dt):
+        self.sprites.update(dt)############Animation
         #self.image = self.sprites.image####
         self.position += self.directions[self.direction]*self.speed*dt
         direction = self.getValidKey()
@@ -70,8 +71,8 @@ class Pacman(Entity):
         if dSquared <= rSquared:
             return True
         return False
-    #####
-    #def render(self, screen):
-    #    self.image = self.sprites.image
-    #    Entity.render(self, screen)
+    #####Animation
+    def render(self, screen):
+        self.image = self.sprites.image
+        Entity.render(self, screen)
         #####

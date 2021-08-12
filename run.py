@@ -8,7 +8,7 @@ from ghosts import GhostGroup
 from fruit import Fruit
 from pauser import Pause
 from text import TextGroup
-from sprites import LifeSprites#######
+from sprites import LifeSprites
 
 class GameController(object):
     def __init__(self):
@@ -23,7 +23,7 @@ class GameController(object):
         self.lives = 5
         self.score = 0
         self.textgroup = TextGroup(self.level)
-        self.lifesprites = LifeSprites(self.lives)#####
+        self.lifesprites = LifeSprites(self.lives)
 
     def setBackground(self):
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
@@ -120,7 +120,7 @@ class GameController(object):
                 elif ghost.mode.current is not SPAWN:
                     print("PACMAN DEAD")
                     self.lives -=  1
-                    self.lifesprites.removeImage()######
+                    self.lifesprites.removeImage()
                     if self.lives <= 0:
                         self.textgroup.showText(GAMEOVERTXT)
                         self.pause.setPause(pauseTime=3, func=self.restartGame)
@@ -182,10 +182,10 @@ class GameController(object):
         self.ghosts.render(self.screen)
         self.textgroup.render(self.screen)
 
-        for i in range(len(self.lifesprites.images)):######
-            x = 10 + 42 * i####
-            y = TILEHEIGHT * NROWS - 32#####
-            self.screen.blit(self.lifesprites.images[i], (x, y))######
+        for i in range(len(self.lifesprites.images)):
+            x = self.lifesprites.images[i].get_width() * i
+            y = SCREENHEIGHT - self.lifesprites.images[i].get_height()
+            self.screen.blit(self.lifesprites.images[i], (x, y))
 
         pygame.display.update()
 
