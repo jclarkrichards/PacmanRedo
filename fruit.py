@@ -13,8 +13,7 @@ class Fruit(Entity):
         self.destroy = False
         self.points = 100
         self.setBetweenNodes(RIGHT)
-        self.sprites = FruitSprites()
-        self.image = self.sprites.image
+        self.sprites = FruitSprites(self)
 
     def update(self, dt):
         self.timer += dt

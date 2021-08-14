@@ -9,6 +9,7 @@ from fruit import Fruit
 from pauser import Pause
 from text import TextGroup
 from sprites import LifeSprites
+from sprites import MazeSprites
 
 class GameController(object):
     def __init__(self):
@@ -59,6 +60,9 @@ class GameController(object):
         self.nodes.denyAccess(2+11.5, 0+14, DOWN, self.pacman)
         self.nodes.denyAccessList(2+11.5, 3+14, LEFT, self.ghosts)
         self.nodes.denyAccessList(2+11.5, 3+14, RIGHT, self.ghosts)
+
+        self.mazesprites = MazeSprites("maze1.txt", "maze1_rotation.txt", self.level)
+        self.background = self.mazesprites.constructBackground(self.background)
 
     def update(self):
         dt = self.clock.tick(30) / 1000.0
@@ -174,7 +178,7 @@ class GameController(object):
     
     def render(self):
         self.screen.blit(self.background, (0, 0))
-        self.nodes.render(self.screen)
+        #self.nodes.render(self.screen)
         self.pellets.render(self.screen)
         if self.fruit is not None:
             self.fruit.render(self.screen)
