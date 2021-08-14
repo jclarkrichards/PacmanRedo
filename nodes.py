@@ -68,7 +68,7 @@ class NodeGroup(object):
                         self.nodesLUT[key].neighbors[RIGHT] = self.nodesLUT[otherkey]
                         self.nodesLUT[otherkey].neighbors[LEFT] = self.nodesLUT[key]
                         key = otherkey
-                elif data[row][col] != '-':
+                elif data[row][col] != '.':
                     key = None
 
 
@@ -85,7 +85,7 @@ class NodeGroup(object):
                         self.nodesLUT[key].neighbors[DOWN] = self.nodesLUT[otherkey]
                         self.nodesLUT[otherkey].neighbors[UP] = self.nodesLUT[key]
                         key = otherkey
-                elif dataT[col][row] != '|':
+                elif dataT[col][row] != '.':
                     key = None
 
     def getDefaultNode(self):
@@ -103,11 +103,11 @@ class NodeGroup(object):
   
   
     def createHomeNodes(self, xoffset, yoffset):
-        homedata = np.array([['.','.','+','.','.'],
-                             ['.','.','|','.','.'],
-                             ['+','.','|','.','+'],
-                             ['+','-','+','-','+'],
-                             ['+','.','.','.','+']])
+        homedata = np.array([['X','X','+','X','X'],
+                             ['X','X','.','X','X'],
+                             ['+','X','.','X','+'],
+                             ['+','.','+','.','+'],
+                             ['+','X','X','X','+']])
 
         self.createNodeTable(homedata, xoffset, yoffset)
         self.connectHorizontally(homedata, xoffset, yoffset)

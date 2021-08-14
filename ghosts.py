@@ -27,6 +27,7 @@ class Ghost(Entity):
         self.directionMethod = self.goalDirection
 
     def update(self, dt):
+        self.sprites.update(dt)
         self.mode.update(dt)
 
         if self.mode.current is SCATTER:
@@ -77,8 +78,7 @@ class Blinky(Ghost):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = BLINKY
         self.color = RED
-        self.sprites = GhostSprites(self.name)
-        self.image = self.sprites.image
+        self.sprites = GhostSprites(self)
     
 
 class Pinky(Ghost):
@@ -86,8 +86,7 @@ class Pinky(Ghost):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = PINKY
         self.color = PINK
-        self.sprites = GhostSprites(self.name)
-        self.image = self.sprites.image
+        self.sprites = GhostSprites(self)
 
     def scatter(self):
         self.goal = Vector2(TILEWIDTH*NCOLS, 0)
@@ -101,8 +100,7 @@ class Inky(Ghost):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = INKY
         self.color = TEAL
-        self.sprites = GhostSprites(self.name)
-        self.image = self.sprites.image
+        self.sprites = GhostSprites(self)
 
     def scatter(self):
         self.goal = Vector2(TILEWIDTH*NCOLS, TILEHEIGHT*NROWS)
@@ -118,8 +116,7 @@ class Clyde(Ghost):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = CLYDE
         self.color = ORANGE
-        self.sprites = GhostSprites(self.name)
-        self.image = self.sprites.image
+        self.sprites = GhostSprites(self)
 
     def scatter(self):
         self.goal = Vector2(0, TILEHEIGHT*NROWS)
@@ -176,7 +173,6 @@ class GhostGroup(object):
            
     def render(self, screen):
         for ghost in self:
-            #ghost.image = ghost.sprites.image####
             ghost.render(screen)
 
 
