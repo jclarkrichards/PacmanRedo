@@ -30,6 +30,7 @@ class GameController(object):
         self.flashBG = False
         self.flashTime = 0.2
         self.flashTimer = 0
+        self.fruitNode = None######
         self.maze = MazeController()#######
 
     def setBackground(self):
@@ -40,44 +41,63 @@ class GameController(object):
 
     def startGame(self):
         self.setBackground()
-        self.maze.loadMaze(self.level)#####
+        maze = self.maze.loadMaze(self.level)#####
 
-        self.nodes = NodeGroup(self.maze.)
-        self.nodes.setPortalPair((0, 17), (27, 17))
-        homekey = self.nodes.createHomeNodes(11.5, 14)
-        self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
-        self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)
-        spawnkey = self.nodes.constructKey(2+11.5, 3+14) 
+        self.nodes = NodeGroup(maze.name+".txt")#####
+        maze.connectHomeNodes(self.nodes)#####
+
+
+        #self.nodes.setPortalPair((0, 17), (27, 17))
+        #homekey = self.nodes.createHomeNodes(11.5, 14)
+        #self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
+        #self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)
+        #spawnkey = self.nodes.constructKey(2+11.5, 3+14) 
+        #print("SPWN KEY")
+        #print(spawnkey)
         
-        pacstartkey = self.nodes.constructKey(15, 26)
-        self.pacman = Pacman(self.nodes.nodesLUT[pacstartkey])
+        #pacstartkey = self.nodes.constructKey(15, 26)
+        pacnode = maze.getPacmanStartNode(self.nodes)######
+        self.pacman = Pacman(pacnode)######
 
-        self.pellets = PelletGroup("maze1.txt")
+        self.pellets = PelletGroup(maze.name+".txt")####
         self.ghosts = GhostGroup(self.nodes.getDefaultNode(), self.pacman)
-        self.ghosts.setSpawnNode(self.nodes.nodesLUT[spawnkey])
+        spawnnode = maze.getSpawnNode(self.nodes)#####
+        self.ghosts.setSpawnNode(spawnnode)####
 
-        blinkystartkey = self.nodes.constructKey(2+11.5, 0+14)
-        pinkystartkey = self.nodes.constructKey(2+11.5, 3+14)
-        inkystartkey = self.nodes.constructKey(0+11.5, 3+14)
-        clydestartkey = self.nodes.constructKey(4+11.5, 3+14)
-        self.ghosts.blinky.setStartNode(self.nodes.nodesLUT[blinkystartkey])
-        self.ghosts.pinky.setStartNode(self.nodes.nodesLUT[pinkystartkey])
-        self.ghosts.inky.setStartNode(self.nodes.nodesLUT[inkystartkey])
-        self.ghosts.clyde.setStartNode(self.nodes.nodesLUT[clydestartkey])
+        maze.setup(self.nodes, self.pacman, self.ghosts)#######
+
+
+
+        #blinkystartkey = self.nodes.constructKey(2+11.5, 0+14)
+        #pinkystartkey = self.nodes.constructKey(2+11.5, 3+14)
+        #inkystartkey = self.nodes.constructKey(0+11.5, 3+14)
+        #clydestartkey = self.nodes.constructKey(4+11.5, 3+14)
+        blinkynode = maze.getBlinkyStartNode(self.nodes)####
+        pinkynode = maze.getPinkyStartNode(self.nodes)####
+        inkynode = maze.getInkyStartNode(self.nodes)####
+        clydenode = maze.getClydeStartNode(self.nodes)####
+
+        self.ghosts.blinky.setStartNode(blinkynode)#####
+        self.ghosts.pinky.setStartNode(pinkynode)###
+        self.ghosts.inky.setStartNode(inkynode)###
+        self.ghosts.clyde.setStartNode(clydenode)####
 
         self.ghosts.inky.startNode.denyAccess(RIGHT, self.ghosts.inky)
         self.ghosts.clyde.startNode.denyAccess(LEFT, self.ghosts.clyde)
 
-        self.nodes.denyAccess(2+11.5, 0+14, DOWN, self.pacman)
-        self.nodes.denyAccessList(2+11.5, 3+14, LEFT, self.ghosts)
-        self.nodes.denyAccessList(2+11.5, 3+14, RIGHT, self.ghosts)
+        #self.nodes.denyAccess(2+11.5, 0+14, DOWN, self.pacman)
+        #self.nodes.denyAccessList(2+11.5, 3+14, LEFT, self.ghosts)
+        #self.nodes.denyAccessList(2+11.5, 3+14, RIGHT, self.ghosts)
 
-        self.nodes.denyAccessList(12, 14, UP, self.ghosts)
-        self.nodes.denyAccessList(15, 14, UP, self.ghosts)
-        self.nodes.denyAccessList(12, 26, UP, self.ghosts)
-        self.nodes.denyAccessList(15, 26, UP, self.ghosts)
+        #self.nodes.denyAccessList(12, 14, UP, self.ghosts)
+        #self.nodes.denyAccessList(15, 14, UP, self.ghosts)
+        #self.nodes.denyAccessList(12, 26, UP, self.ghosts)
+        #self.nodes.denyAccessList(15, 26, UP, self.ghosts)
 
-        self.mazesprites = MazeSprites("maze1.txt", "maze1_rotation.txt")
+
+        self.fruitNode = maze.getFruitNode(self.nodes)#####
+
+        self.mazesprites = MazeSprites(maze.name+".txt", maze.name+"_rotation.txt")######
         self.background_norm = self.mazesprites.constructBackground(self.background_norm, self.level%5)
         self.background_flash = self.mazesprites.constructBackground(self.background_flash, 5)
         self.background = self.background_norm
@@ -178,8 +198,9 @@ class GameController(object):
     def checkFruitEvents(self):
         if self.pellets.numEaten == 50 or self.pellets.numEaten == 140:
             if self.fruit is None:
-                nodekey = self.nodes.constructKey(9, 20)
-                self.fruit = Fruit(self.nodes.nodesLUT[nodekey])
+                #nodekey = self.nodes.constructKey(9, 20)
+                #self.fruit = Fruit(self.nodes.nodesLUT[nodekey])
+                self.fruit = Fruit(self.fruitNode, self.level)#######
         if self.fruit is not None:
             if self.pacman.collideCheck(self.fruit):
                 
@@ -205,6 +226,8 @@ class GameController(object):
         self.lives = 5
         self.level = 0
         self.textgroup.updateLevel(self.level)
+        self.score = 0#######
+        self.textgroup.updateScore(self.score)######
         self.pause.paused = True
         self.fruit = None
         self.startGame()
