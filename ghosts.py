@@ -35,6 +35,11 @@ class Ghost(Entity):
         elif self.mode.current is CHASE:
             self.chase()
 
+        #if (self.node.neighbors[PORTAL] is not None or 
+        #    self.target.neighbors[PORTAL] is not None):
+        #    self.speed /= 2
+
+
         Entity.update(self, dt)
 
     def scatter(self):
@@ -150,6 +155,7 @@ class GhostGroup(object):
     def startFreight(self):
         for ghost in self:
             ghost.startFreight()
+        self.resetPoints()
 
     def setSpawnNode(self, node):
         for ghost in self:
@@ -166,6 +172,10 @@ class GhostGroup(object):
     def hide(self):
         for ghost in self:
             ghost.visible = False
+
+    def show(self):
+        for ghost in self:
+            ghost.visible = True
   
     def reset(self):
         for ghost in self:

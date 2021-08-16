@@ -24,37 +24,3 @@ class Pause(object):
 
     def flip(self):
         self.paused = not self.paused
-
-    
-
-
-
-
-
-
-    """            
-    def startTimer(self, pauseTime, pauseType=None):
-        self.pauseTime = pauseTime
-        self.pauseType = pauseType
-        self.timer = 0
-        self.paused = True
-        
-    def player(self):
-        self.playerPaused = not self.playerPaused
-        if self.playerPaused:
-            self.paused = True
-        else:
-            self.paused = False
-
-    def force(self, pause):
-        self.paused = pause
-        self.playerPaused = pause
-        self.timer = 0
-        self.pauseTime = 0
-
-    def settlePause(self, gamecontroller):
-        if self.pauseType == "die":
-            gamecontroller.resolveDeath()
-        elif self.pauseType == "clear":
-            gamecontroller.resolveLevelClear()
-    """

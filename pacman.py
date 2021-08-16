@@ -18,6 +18,14 @@ class Pacman(Entity):
         Entity.reset(self)
         self.direction = LEFT
         self.setBetweenNodes(LEFT)
+        self.alive = True
+        self.image = self.sprites.getStartImage()
+        self.sprites.reset()
+
+    def die(self):
+        self.alive = False
+        self.direction = STOP
+        
         
     def update(self, dt):
         self.sprites.update(dt)

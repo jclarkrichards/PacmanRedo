@@ -42,9 +42,8 @@ class Text(object):
 
 
 class TextGroup(object):
-    def __init__(self, level):
+    def __init__(self):
         self.nextid = 1  #Because SCORETXT is 0 and LEVELTXT is 1
-        self.level = level
         self.alltext = {}
         self.setupText()
         self.showText(READYTXT)
@@ -59,7 +58,7 @@ class TextGroup(object):
         
     def setupText(self):
         self.alltext[SCORETXT] = Text("0".zfill(8), WHITE, 0, 16, 16)
-        self.alltext[LEVELTXT] = Text(str(self.level).zfill(3), WHITE, 368, 16, 16)
+        self.alltext[LEVELTXT] = Text(str(1).zfill(3), WHITE, 368, 16, 16)
         self.alltext[READYTXT] = Text("READY!", YELLOW, 180, 320, 16, visible=False)
         self.alltext[PAUSETXT] = Text("PAUSED!", YELLOW, 170, 320, 16, visible=False)
         self.alltext[GAMEOVERTXT] = Text("GAMEOVER!", YELLOW, 160, 320, 16, visible=False)
@@ -83,6 +82,9 @@ class TextGroup(object):
 
     def updateScore(self, score):
         self.updateText(SCORETXT, str(score).zfill(8))
+
+    def updateLevel(self, level):       
+        self.updateText(LEVELTXT, str(level + 1).zfill(3))
 
     def updateText(self, id, value):
         if id in self.alltext.keys():

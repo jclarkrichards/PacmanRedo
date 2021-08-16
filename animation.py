@@ -1,31 +1,28 @@
 from constants import *
 
 class Animator(object):
-    def __init__(self, frames=[], speed=20):
-        #self.animType = animType
+    def __init__(self, frames=[], speed=20, loop=True):
         self.frames = frames
         self.current_frame = 0
-        #self.finished = False
         self.speed = speed
+        self.loop = loop
         self.dt = 0
+        self.finished = False
 
-    #def reset(self):
-    #    self.current_frame = 0
-    #    self.finished = False
-        
-    #def addFrame(self, frame):
-    #    self.frames.append(frame)
+    def reset(self):
+        self.current_frame = 0
+        self.finished = False
 
     def update(self, dt):
-        self.nextFrame(dt)
+        if not self.finished:
+            self.nextFrame(dt)
         if self.current_frame == len(self.frames):
-            self.current_frame = 0
-        #if self.animType == LOOPANIM:
-        #    self.loop(dt)
-        #elif self.animType == ONETIMEANIM:
-        #    self.onepass(dt)
-        #elif self.animType == "static":
-        #    self.current_frame = 0
+            if self.loop:
+                self.current_frame = 0
+            else:
+                self.finished = True
+                self.current_frame -= 1
+   
         return self.frames[self.current_frame]
 
     def nextFrame(self, dt):
@@ -34,16 +31,7 @@ class Animator(object):
             self.current_frame += 1
             self.dt = 0
 
-    #def loop(self, dt):
-    #    self.nextFrame(dt)
-    #    if self.current_frame == len(self.frames):
-    #        self.current_frame = 0
 
-    #def onepass(self, dt):
-    #    if not self.finished:
-    #        self.nextFrame(dt)
-    #        if self.current_frame == len(self.frames) - 1:
-    #            self.finished = True
 
 
 

@@ -48,6 +48,3 @@ PAUSETXT = 3
 GAMEOVERTXT = 4
 
 
-#Animation Types
-LOOPANIM = 0##########
-ONETIMEANIM = 1###########

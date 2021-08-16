@@ -51,9 +51,9 @@ class PelletGroup(object):
         data = self.readPelletfile(pelletfile)        
         for row in range(data.shape[0]):
             for col in range(data.shape[1]):
-                if data[row][col] == 'p':
+                if data[row][col] in ['.', '+']:
                     self.pelletList.append(Pellet(row, col))
-                elif data[row][col] == 'P':
+                elif data[row][col] in ['P', 'p']:
                     pp = PowerPellet(row, col)
                     self.pelletList.append(pp)
                     self.powerpellets.append(pp)

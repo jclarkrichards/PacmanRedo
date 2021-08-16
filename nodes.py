@@ -38,6 +38,8 @@ class NodeGroup(object):
     def __init__(self, level):
         self.level = level
         self.nodesLUT = {} #Lookup table for the nodes
+        self.nodeSymbols = ['+', 'P', 'n']
+        self.pathSymbols = ['.', '-', '|', 'p']
         data = self.readMazeFile(level)
         self.createNodeTable(data)
         self.connectHorizontally(data)
@@ -49,7 +51,7 @@ class NodeGroup(object):
     def createNodeTable(self, data, xoffset=0, yoffset=0):
         for row in list(range(data.shape[0])):
             for col in list(range(data.shape[1])):
-                if data[row][col] == '+':
+                if data[row][col] in self.nodeSymbols:
                     x, y = self.constructKey(col+xoffset, row+yoffset)
                     self.nodesLUT[(x, y)] = Node(x, y)
 
@@ -60,7 +62,7 @@ class NodeGroup(object):
         for row in list(range(data.shape[0])):
             key = None
             for col in list(range(data.shape[1])):
-                if data[row][col] == '+':
+                if data[row][col] in self.nodeSymbols:
                     if key is None:
                         key = self.constructKey(col+xoffset, row+yoffset)
                     else:
@@ -68,7 +70,7 @@ class NodeGroup(object):
                         self.nodesLUT[key].neighbors[RIGHT] = self.nodesLUT[otherkey]
                         self.nodesLUT[otherkey].neighbors[LEFT] = self.nodesLUT[key]
                         key = otherkey
-                elif data[row][col] != '.':
+                elif data[row][col] not in self.pathSymbols:
                     key = None
 
 
@@ -77,7 +79,7 @@ class NodeGroup(object):
         for col in list(range(dataT.shape[0])):
             key = None
             for row in list(range(dataT.shape[1])):
-                if dataT[col][row] == '+':
+                if dataT[col][row] in self.nodeSymbols:
                     if key is None:
                         key = self.constructKey(col+xoffset, row+yoffset)
                     else:
@@ -85,7 +87,7 @@ class NodeGroup(object):
                         self.nodesLUT[key].neighbors[DOWN] = self.nodesLUT[otherkey]
                         self.nodesLUT[otherkey].neighbors[UP] = self.nodesLUT[key]
                         key = otherkey
-                elif dataT[col][row] != '.':
+                elif dataT[col][row] not in self.pathSymbols:
                     key = None
 
     def getDefaultNode(self):

@@ -18,6 +18,7 @@ class Entity(object):
         self.directionMethod = self.randomDirection
         self.setStartNode(node)
         self.image = None
+        self.alive = True
 
     def setPosition(self):
         self.position = self.node.position.copy()
