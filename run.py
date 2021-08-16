@@ -10,6 +10,7 @@ from pauser import Pause
 from text import TextGroup
 from sprites import LifeSprites
 from sprites import MazeSprites
+from mazes import MazeController########
 
 class GameController(object):
     def __init__(self):
@@ -29,6 +30,7 @@ class GameController(object):
         self.flashBG = False
         self.flashTime = 0.2
         self.flashTimer = 0
+        self.maze = MazeController()#######
 
     def setBackground(self):
         self.background_norm = pygame.surface.Surface(SCREENSIZE).convert()
@@ -38,7 +40,9 @@ class GameController(object):
 
     def startGame(self):
         self.setBackground()
-        self.nodes = NodeGroup("maze1.txt")
+        self.maze.loadMaze(self.level)#####
+
+        self.nodes = NodeGroup(self.maze.)
         self.nodes.setPortalPair((0, 17), (27, 17))
         homekey = self.nodes.createHomeNodes(11.5, 14)
         self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
