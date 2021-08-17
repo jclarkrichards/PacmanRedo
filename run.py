@@ -32,7 +32,7 @@ class GameController(object):
         self.flashTimer = 0
         self.fruitNode = None######
         self.maze = MazeController()#######
-        self.fruitCaptured = []######Fruit stuff for lower right corner
+        self.fruitCaptured = []
 
     def setBackground(self):
         self.background_norm = pygame.surface.Surface(SCREENSIZE).convert()
@@ -212,15 +212,14 @@ class GameController(object):
                 
                 self.updateScore(self.fruit.points)
                 self.textgroup.addText(str(self.fruit.points), WHITE, self.fruit.position.x, self.fruit.position.y, 8, time=1)
-
-                ####################################################Fruit stuff
-                fruitCaptured = False#####
+               
+                fruitCaptured = False
                 for fruit in self.fruitCaptured:
                     if fruit.get_offset() == self.fruit.image.get_offset():
                         fruitCaptured = True
                         break
                 if not fruitCaptured:
-                    self.fruitCaptured.append(self.fruit.image)#####
+                    self.fruitCaptured.append(self.fruit.image)
                
                 self.fruit = None
                 
@@ -244,7 +243,7 @@ class GameController(object):
         self.textgroup.updateLevel(self.level)
         self.score = 0#######
         self.textgroup.updateScore(self.score)######
-        self.fruitCaptured = []############fruit stuff
+        self.fruitCaptured = []
         self.pause.paused = True
         self.fruit = None
         self.startGame()
@@ -277,7 +276,7 @@ class GameController(object):
             y = SCREENHEIGHT - self.lifesprites.images[i].get_height()
             self.screen.blit(self.lifesprites.images[i], (x, y))
 
-        for i in range(len(self.fruitCaptured)):######fruit stuff
+        for i in range(len(self.fruitCaptured)):
             x = SCREENWIDTH - self.fruitCaptured[i].get_width() * (i+1)
             y = SCREENHEIGHT - self.fruitCaptured[i].get_height()
             self.screen.blit(self.fruitCaptured[i], (x, y))
