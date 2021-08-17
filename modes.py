@@ -46,9 +46,10 @@ class ModeController(object):
 
         if self.current is SPAWN:
             if self.entity.node == self.entity.spawnNode:
-                print("Arrived at spawn point!")
+                #print("Arrived at spawn point!")
                 self.entity.normalMode()
                 self.current = self.mainmode.mode
+
         
         #print(self.current)
 

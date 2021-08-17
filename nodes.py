@@ -44,6 +44,7 @@ class NodeGroup(object):
         self.createNodeTable(data)
         self.connectHorizontally(data)
         self.connectVertically(data)
+        self.homekey = None###########
         
     def readMazeFile(self, textfile):
         return np.loadtxt(textfile, dtype='<U1')
@@ -114,13 +115,33 @@ class NodeGroup(object):
         self.createNodeTable(homedata, xoffset, yoffset)
         self.connectHorizontally(homedata, xoffset, yoffset)
         self.connectVertically(homedata, xoffset, yoffset)
-        return self.constructKey(xoffset+2, yoffset)
+        self.homekey = self.constructKey(xoffset+2, yoffset)####
+        #self.homenode = self.nodesLUT[self.homekey]#####
+        print("HOME NODE")
+        print(self.nodesLUT[self.homekey].position)
+        return self.homekey#####
 
     def connectHomeNodes(self, homekey, otherkey, direction):     
         key = self.constructKey(*otherkey)
+        #self.homenode = self.nodesLUT[key]######
         self.nodesLUT[homekey].neighbors[direction] = self.nodesLUT[key]
         self.nodesLUT[key].neighbors[direction*-1] = self.nodesLUT[homekey]
+    #########
+    def denyHomeAccess(self, entity):
+        self.nodesLUT[self.homekey].denyAccess(DOWN, entity)
 
+    def allowHomeAccess(self, entity):
+        self.nodesLUT[self.homekey].allowAccess(DOWN, entity)
+
+    def denyHomeAccessList(self, entities):
+        for entity in entities:
+            self.denyHomeAccess(entity)
+
+    def allowHomeAccessList(self, entities):
+        for entity in entities:
+            self.allowHomeAccess(entity)
+       
+    #########
     def denyAccess(self, nodex, nodey, direction, entity):
         key = self.constructKey(nodex, nodey)
         if key is not None:

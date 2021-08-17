@@ -18,9 +18,7 @@ class Ghost(Entity):
         self.mode = ModeController(self)
         self.blinky = blinky
         self.homeNode = node
-        
-
-    
+         
     def reset(self):
         Entity.reset(self)
         self.points = 200
@@ -72,6 +70,7 @@ class Ghost(Entity):
     def normalMode(self):
         self.speed = 100
         self.directionMethod = self.goalDirection
+        self.homeNode.denyAccess(DOWN, self)#######
 
 
 

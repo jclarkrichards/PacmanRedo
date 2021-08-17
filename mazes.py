@@ -14,14 +14,16 @@ class MazeBase(object):
 
     def setup(self, nodegroup, pacman, ghostgroup):
         self.setPortals(nodegroup)
-        #self.connectHomeNodes(nodegroup)
         self.denyAccess(nodegroup, pacman, ghostgroup)
-        
-
 
     def denyAccess(self, nodegroup, pacman, ghostgroup):
+        nodegroup.denyHomeAccess(pacman)
+        nodegroup.denyHomeAccessList(ghostgroup)
         x, y = self.addoffset(2, 0)
-        nodegroup.denyAccess(x, y, DOWN, pacman)
+        print("In maze deny access thing.....")
+        print(x, y)
+        #nodegroup.denyAccess(x, y, DOWN, pacman)
+        #nodegroup.denyAccessList(x, y, DOWN, ghostgroup)
         x, y = self.addoffset(2, 3)
         nodegroup.denyAccessList(x, y, LEFT, ghostgroup)
         nodegroup.denyAccessList(x, y, RIGHT, ghostgroup)
