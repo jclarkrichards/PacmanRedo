@@ -1,4 +1,3 @@
-class Pacman(object):
-    def __init__(self, node):
+    def startGame(self):
         ...
-        #newtext::self.collideRadius = 5
+        self.ghost = Ghost(self.nodes.getStartTempNode(), self.pacman)
