@@ -5,7 +5,7 @@ from pacman import Pacman
 from nodes import NodeGroup
 from pellets import PelletGroup
 from ghosts import GhostGroup
-from fruit import Fruit
+from fruit import Fruit, FruitMover
 from pauser import Pause
 from text import TextGroup
 from sprites import LifeSprites
@@ -184,7 +184,6 @@ class GameController(object):
                     ghost.visible = False
                     self.pause.setPause(pauseTime=1, func=self.showEntities)
                     ghost.startSpawn()
-                    #self.nodes.allowAccess(13.5, 14, DOWN, ghost)#####
                     self.nodes.allowHomeAccess(ghost)####
 
                 elif ghost.mode.current is not SPAWN:
@@ -206,7 +205,15 @@ class GameController(object):
             if self.fruit is None:
                 #nodekey = self.nodes.constructKey(9, 20)
                 #self.fruit = Fruit(self.nodes.nodesLUT[nodekey])
-                self.fruit = Fruit(self.fruitNode, self.level)#######
+                #self.fruit = Fruit(self.fruitNode, self.level)######Normal one
+                startnode = self.nodes.getNodeFromTiles(0, 17)
+                endnode = self.nodes.getNodeFromTiles(27, 17)
+                if startnode is not None and endnode is not None:
+                    self.fruit = FruitMover(startnode, endnode, self.level)
+                else:
+                    print("START node = " + str(startnode))
+                    print("END node = " + str(endnode))
+
         if self.fruit is not None:
             if self.pacman.collideCheck(self.fruit):
                 

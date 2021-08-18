@@ -19,11 +19,6 @@ class MazeBase(object):
     def denyAccess(self, nodegroup, pacman, ghostgroup):
         nodegroup.denyHomeAccess(pacman)
         nodegroup.denyHomeAccessList(ghostgroup)
-        x, y = self.addoffset(2, 0)
-        print("In maze deny access thing.....")
-        print(x, y)
-        #nodegroup.denyAccess(x, y, DOWN, pacman)
-        #nodegroup.denyAccessList(x, y, DOWN, ghostgroup)
         x, y = self.addoffset(2, 3)
         nodegroup.denyAccessList(x, y, LEFT, ghostgroup)
         nodegroup.denyAccessList(x, y, RIGHT, ghostgroup)

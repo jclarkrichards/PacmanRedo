@@ -33,11 +33,6 @@ class Ghost(Entity):
         elif self.mode.current is CHASE:
             self.chase()
 
-        #if (self.node.neighbors[PORTAL] is not None or 
-        #    self.target.neighbors[PORTAL] is not None):
-        #    self.speed /= 2
-
-
         Entity.update(self, dt)
 
     def scatter(self):

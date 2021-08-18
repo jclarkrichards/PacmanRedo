@@ -7,10 +7,10 @@ class Node(object):
     def __init__(self, x, y):
         self.position = Vector2(x, y)
         self.neighbors = {UP:None, DOWN:None, LEFT:None, RIGHT:None, PORTAL:None}
-        self.access = {UP:[PACMAN, BLINKY, PINKY, INKY, CLYDE], 
-                       DOWN:[PACMAN, BLINKY, PINKY, INKY, CLYDE], 
-                       LEFT:[PACMAN, BLINKY, PINKY, INKY, CLYDE], 
-                       RIGHT:[PACMAN, BLINKY, PINKY, INKY, CLYDE]}#Each node gives access for entities to pass in any particular direction
+        self.access = {UP:[PACMAN, BLINKY, PINKY, INKY, CLYDE, FRUIT], 
+                       DOWN:[PACMAN, BLINKY, PINKY, INKY, CLYDE, FRUIT], 
+                       LEFT:[PACMAN, BLINKY, PINKY, INKY, CLYDE, FRUIT], 
+                       RIGHT:[PACMAN, BLINKY, PINKY, INKY, CLYDE, FRUIT]}#Each node gives access for entities to pass in any particular direction
         self.color = RED###temp thing
         
     def __str__(self):
@@ -58,6 +58,17 @@ class NodeGroup(object):
 
     def constructKey(self, x, y):
         return x * TILEWIDTH, y * TILEHEIGHT
+
+    def getNodeFromPixels(self, xpixel, ypixel):
+        if (xpixel, ypixel) in self.nodesLUT.keys():
+            return self.nodesLUT[(xpixel, ypixel)]
+        return None
+
+    def getNodeFromTiles(self, col, row):
+        x, y = self.constructKey(col, row)
+        if (x, y) in self.nodesLUT.keys():
+            return self.nodesLUT[(x, y)]
+        return None
 
     def connectHorizontally(self, data, xoffset=0, yoffset=0):
         for row in list(range(data.shape[0])):
@@ -117,13 +128,10 @@ class NodeGroup(object):
         self.connectVertically(homedata, xoffset, yoffset)
         self.homekey = self.constructKey(xoffset+2, yoffset)####
         #self.homenode = self.nodesLUT[self.homekey]#####
-        print("HOME NODE")
-        print(self.nodesLUT[self.homekey].position)
         return self.homekey#####
 
     def connectHomeNodes(self, homekey, otherkey, direction):     
         key = self.constructKey(*otherkey)
-        #self.homenode = self.nodesLUT[key]######
         self.nodesLUT[homekey].neighbors[direction] = self.nodesLUT[key]
         self.nodesLUT[key].neighbors[direction*-1] = self.nodesLUT[homekey]
     #########
