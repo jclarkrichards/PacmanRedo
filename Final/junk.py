@@ -1,3 +1,10 @@
     def startGame(self):
-        ...
+        self.setBackground()
+        self.nodes = NodeGroup("maze1.txt")
+        self.nodes.setPortalPair((0,17), (27,17))
+        #newtext::homekey = self.nodes.createHomeNodes(11.5, 14)
+        #newtext::self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
+        #newtext::self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)
+        self.pacman = Pacman(self.nodes.getStartTempNode())
+        self.pellets = PelletGroup("maze1.txt")
         self.ghost = Ghost(self.nodes.getStartTempNode(), self.pacman)

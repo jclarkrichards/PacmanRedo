@@ -27,6 +27,7 @@ class NodeGroup(object):
         self.createNodeTable(data)
         self.connectHorizontally(data)
         self.connectVertically(data)
+        self.homekey = None
 
     def readMazeFile(self, textfile):
         return np.loadtxt(textfile, dtype='<U1')
@@ -85,31 +86,23 @@ class NodeGroup(object):
             self.nodesLUT[key1].neighbors[PORTAL] = self.nodesLUT[key2]
             self.nodesLUT[key2].neighbors[PORTAL] = self.nodesLUT[key1]
 
-    def setupTestNodes(self):
-        nodeA = Node(80 ,80)
-        nodeB = Node(160, 80)
-        nodeC = Node(80, 160)
-        nodeD = Node(160, 160)
-        nodeE = Node(208, 160)
-        nodeF = Node(80, 320)
-        nodeG = Node(208, 320)
-        nodeA.neighbors[RIGHT] = nodeB
-        nodeA.neighbors[DOWN] = nodeC
-        nodeB.neighbors[LEFT] = nodeA
-        nodeB.neighbors[DOWN] = nodeD
-        nodeC.neighbors[UP] = nodeA
-        nodeC.neighbors[RIGHT] = nodeD
-        nodeC.neighbors[DOWN] = nodeF
-        nodeD.neighbors[UP] = nodeB
-        nodeD.neighbors[LEFT] = nodeC
-        nodeD.neighbors[RIGHT] = nodeE
-        nodeE.neighbors[LEFT] = nodeD
-        nodeE.neighbors[DOWN] = nodeG
-        nodeF.neighbors[UP] = nodeC
-        nodeF.neighbors[RIGHT] = nodeG
-        nodeG.neighbors[UP] = nodeE
-        nodeG.neighbors[LEFT] = nodeF
-        self.nodeList = [nodeA, nodeB, nodeC, nodeD, nodeE, nodeF, nodeG]
+    def createHomeNodes(self, xoffset, yoffset):
+        homedata = np.array([['X','X','+','X','X'],
+                             ['X','X','.','X','X'],
+                             ['+','X','.','X','+'],
+                             ['+','.','+','.','+'],
+                             ['+','X','X','X','+']])
+
+        self.createNodeTable(homedata, xoffset, yoffset)
+        self.connectHorizontally(homedata, xoffset, yoffset)
+        self.connectVertically(homedata, xoffset, yoffset)
+        self.homekey = self.constructKey(xoffset+2, yoffset)
+        return self.homekey
+
+    def connectHomeNodes(self, homekey, otherkey, direction):     
+        key = self.constructKey(*otherkey)
+        self.nodesLUT[homekey].neighbors[direction] = self.nodesLUT[key]
+        self.nodesLUT[key].neighbors[direction*-1] = self.nodesLUT[homekey]
 
     def render(self, screen):
         for node in self.nodesLUT.values():
