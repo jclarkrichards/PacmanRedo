@@ -4,7 +4,7 @@ from constants import *
 from pacman import Pacman
 from nodes import NodeGroup
 from pellets import PelletGroup
-from ghosts import Ghost
+from ghosts import GhostGroup
 
 class GameController(object):
     def __init__(self):
@@ -26,14 +26,17 @@ class GameController(object):
         self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)
         self.pacman = Pacman(self.nodes.getStartTempNode())
         self.pellets = PelletGroup("maze1.txt")
-        self.ghost = Ghost(self.nodes.getStartTempNode(), self.pacman)
+        self.ghosts = GhostGroup(self.nodes.getStartTempNode(), self.pacman)
+        spawnkey = self.nodes.constructKey(2+11.5, 3+14)
+        self.ghosts.setSpawnNode(self.nodes.nodesLUT[spawnkey])
 
     def update(self):
         dt = self.clock.tick(30) / 1000.0
         self.pacman.update(dt)
-        self.ghost.update(dt)
+        self.ghosts.update(dt)
         self.pellets.update(dt)
         self.checkPelletEvents()
+        self.checkGhostEvents()
         self.checkEvents()
         self.render()
 
@@ -46,13 +49,22 @@ class GameController(object):
         pellet = self.pacman.eatPellets(self.pellets.pelletList)
         if pellet:
             self.pellets.pelletList.remove(pellet)
+            if pellet.name == POWERPELLET:
+                self.ghosts.startFreight()
+
+    def checkGhostEvents(self):
+        for ghost in self.ghosts:
+            if self.pacman.collideGhost(ghost):
+                if ghost.mode.current is FREIGHT:
+                    ghost.startSpawn()
+    
 
     def render(self):
         self.screen.blit(self.background, (0, 0))
         self.nodes.render(self.screen)
         self.pellets.render(self.screen)
         self.pacman.render(self.screen)
-        self.ghost.render(self.screen)
+        self.ghosts.render(self.screen)
         pygame.display.update()
 
 
