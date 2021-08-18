@@ -19,7 +19,7 @@ class Entity(object):
         self.setStartNode(node)
         self.image = None
         self.alive = True
-        self.disablePortal = False###
+        self.disablePortal = False
 
     def setPosition(self):
         self.position = self.node.position.copy()
