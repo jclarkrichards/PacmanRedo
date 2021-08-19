@@ -19,6 +19,7 @@ class Entity(object):
         self.goal = None
         self.directionMethod = self.randomDirection
         self.setStartNode(node)
+        self.image = None
 
     def setPosition(self):
         self.position = self.node.position.copy()
@@ -43,8 +44,9 @@ class Entity(object):
           
     def validDirection(self, direction):
         if direction is not STOP:
-            if self.node.neighbors[direction] is not None:
-                return True
+            if self.name in self.node.access[direction]:
+                if self.node.neighbors[direction] is not None:
+                    return True
         return False
 
     def getNewTarget(self, direction):
@@ -113,5 +115,10 @@ class Entity(object):
 
     def render(self, screen):
         if self.visible:
-            p = self.position.asInt()
-            pygame.draw.circle(screen, self.color, p, self.radius)
+            if self.image is not None:
+                adjust = Vector2(TILEWIDTH, TILEHEIGHT) / 2
+                p = self.position - adjust
+                screen.blit(self.image, p.asTuple())
+            else:
+                p = self.position.asInt()
+                pygame.draw.circle(screen, self.color, p, self.radius)

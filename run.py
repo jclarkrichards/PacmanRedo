@@ -184,7 +184,7 @@ class GameController(object):
                     ghost.visible = False
                     self.pause.setPause(pauseTime=1, func=self.showEntities)
                     ghost.startSpawn()
-                    self.nodes.allowHomeAccess(ghost)####
+                    self.nodes.allowHomeAccess(ghost)
 
                 elif ghost.mode.current is not SPAWN:
                     if self.pacman.alive:
@@ -248,14 +248,14 @@ class GameController(object):
         self.lives = 5
         self.level = 0
         self.textgroup.updateLevel(self.level)
-        self.score = 0#######
-        self.textgroup.updateScore(self.score)######
+        self.score = 0
+        self.textgroup.updateScore(self.score)
         self.fruitCaptured = []
         self.pause.paused = True
         self.fruit = None
         self.startGame()
         self.textgroup.showText(READYTXT)
-        self.lifesprites.resetLives(self.lives)#####
+        self.lifesprites.resetLives(self.lives)
 
     def resetLevel(self):
         self.pause.paused = True

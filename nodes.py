@@ -133,7 +133,7 @@ class NodeGroup(object):
         key = self.constructKey(*otherkey)
         self.nodesLUT[homekey].neighbors[direction] = self.nodesLUT[key]
         self.nodesLUT[key].neighbors[direction*-1] = self.nodesLUT[homekey]
-    #########
+ 
     def denyHomeAccess(self, entity):
         self.nodesLUT[self.homekey].denyAccess(DOWN, entity)
 
@@ -148,7 +148,6 @@ class NodeGroup(object):
         for entity in entities:
             self.allowHomeAccess(entity)
        
-    #########
     def denyAccess(self, nodex, nodey, direction, entity):
         key = self.constructKey(nodex, nodey)
         if key is not None:
