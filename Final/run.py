@@ -6,6 +6,7 @@ from nodes import NodeGroup
 from pellets import PelletGroup
 from ghosts import GhostGroup
 from fruit import Fruit
+from pauser import Pause
 
 class GameController(object):
     def __init__(self):
@@ -14,6 +15,9 @@ class GameController(object):
         self.background = None
         self.clock = pygame.time.Clock()
         self.fruit = None
+        self.pause = Pause(True)
+        self.level = 0
+        self.lives = 5
 
     def setBackground(self):
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
@@ -38,14 +42,18 @@ class GameController(object):
 
     def update(self):
         dt = self.clock.tick(30) / 1000.0
-        self.pacman.update(dt)
-        self.ghosts.update(dt)
         self.pellets.update(dt)
-        if self.fruit is not None:
-            self.fruit.update(dt)
-        self.checkPelletEvents()
-        self.checkGhostEvents()
-        self.checkFruitEvents()
+        if not self.pause.paused:
+            self.pacman.update(dt)
+            self.ghosts.update(dt)      
+            if self.fruit is not None:
+                self.fruit.update(dt)
+            self.checkPelletEvents()
+            self.checkGhostEvents()
+            self.checkFruitEvents()
+        afterPauseMethod = self.pause.update(dt)
+        if afterPauseMethod is not None:
+            afterPauseMethod()
         self.checkEvents()
         self.render()
 
@@ -53,6 +61,13 @@ class GameController(object):
         for event in pygame.event.get():
             if event.type == QUIT:
                 exit()
+            elif event.type == KEYDOWN:
+                if event.key == K_SPACE:
+                    self.pause.setPause(playerPaused=True)
+                    if not self.pause.paused:
+                        self.showEntities()
+                    else:
+                        self.hideEntities()
 
     def checkPelletEvents(self):
         pellet = self.pacman.eatPellets(self.pellets.pelletList)
@@ -61,25 +76,65 @@ class GameController(object):
             self.pellets.pelletList.remove(pellet)
             if pellet.name == POWERPELLET:
                 self.ghosts.startFreight()
+            if self.pellets.isEmpty():
+                self.hideEntities()
+                self.pause.setPause(pauseTime=3, func=self.nextLevel)
 
     def checkGhostEvents(self):
         for ghost in self.ghosts:
             if self.pacman.collideGhost(ghost):
                 if ghost.mode.current is FREIGHT:
+                    self.pacman.visible = False
+                    ghost.visible = False
+                    self.pause.setPause(pauseTime=1, func=self.showEntities)
                     ghost.startSpawn()
+                elif ghost.mode.current is not SPAWN:
+                    if self.pacman.alive:
+                        self.lives -=  1
+                        self.pacman.die()               
+                        self.ghosts.hide()
+                        if self.lives <= 0:
+                            self.pause.setPause(pauseTime=3, func=self.restartGame)
+                        else:
+                            self.pause.setPause(pauseTime=3, func=self.resetLevel)
     
     def checkFruitEvents(self):
-        print(self.pellets.numEaten)
         if self.pellets.numEaten == 50 or self.pellets.numEaten == 140:
             if self.fruit is None:
                 self.fruit = Fruit(self.nodes.getNodeFromTiles(9, 20))
-                print("Create fruit")
                 print(self.fruit)
         if self.fruit is not None:
             if self.pacman.collideCheck(self.fruit):
                 self.fruit = None
             elif self.fruit.destroy:
                 self.fruit = None
+
+    def showEntities(self):
+        self.pacman.visible = True
+        self.ghosts.show()
+
+    def hideEntities(self):
+        self.pacman.visible = False
+        self.ghosts.hide()
+
+    def nextLevel(self):
+        self.showEntities()
+        self.level += 1
+        self.pause.paused = True
+        self.startGame()
+
+    def restartGame(self):
+        self.lives = 5
+        self.level = 0
+        self.pause.paused = True
+        self.fruit = None
+        self.startGame()
+
+    def resetLevel(self):
+        self.pause.paused = True
+        self.pacman.reset()
+        self.ghosts.reset()
+        self.fruit = None
 
     def render(self):
         self.screen.blit(self.background, (0, 0))
@@ -97,3 +152,6 @@ if __name__ == "__main__":
     game.startGame()
     while True:
         game.update()
+
+
+

@@ -187,7 +187,7 @@ class GameController(object):
                     self.nodes.allowHomeAccess(ghost)####
 
                 elif ghost.mode.current is not SPAWN:
-                    if self.pacman.alive:###
+                    if self.pacman.alive:
                         self.lives -=  1
                         self.pacman.die()               
                         self.ghosts.hide()
