@@ -20,12 +20,15 @@ class Pacman(Entity):
         self.direction = LEFT
         self.setBetweenNodes(LEFT)
         self.alive = True
+        self.image = self.sprites.getStartImage()
+        self.sprites.reset()
 
     def die(self):
         self.alive = False
         self.direction = STOP
 
     def update(self, dt):	
+        self.sprites.update(dt)
         self.position += self.directions[self.direction]*self.speed*dt
         direction = self.getValidKey()
         if self.overshotTarget():

@@ -10,7 +10,7 @@ from pauser import Pause
 from text import TextGroup
 from sprites import LifeSprites
 from sprites import MazeSprites
-from mazes import MazeController########
+from mazes import MazeController
 
 class GameController(object):
     def __init__(self):
@@ -30,8 +30,8 @@ class GameController(object):
         self.flashBG = False
         self.flashTime = 0.2
         self.flashTimer = 0
-        self.fruitNode = None######
-        self.maze = MazeController()#######
+        self.fruitNode = None
+        self.maze = MazeController()
         self.fruitCaptured = []
 
     def setBackground(self):
@@ -47,16 +47,6 @@ class GameController(object):
         self.nodes = NodeGroup(maze.name+".txt")#####
         maze.connectHomeNodes(self.nodes)#####
 
-
-        #self.nodes.setPortalPair((0, 17), (27, 17))
-        #homekey = self.nodes.createHomeNodes(11.5, 14)
-        #self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
-        #self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)
-        #spawnkey = self.nodes.constructKey(2+11.5, 3+14) 
-        #print("SPWN KEY")
-        #print(spawnkey)
-        
-        #pacstartkey = self.nodes.constructKey(15, 26)
         pacnode = maze.getPacmanStartNode(self.nodes)######
         self.pacman = Pacman(pacnode)######
 
@@ -70,10 +60,6 @@ class GameController(object):
 
 
 
-        #blinkystartkey = self.nodes.constructKey(2+11.5, 0+14)
-        #pinkystartkey = self.nodes.constructKey(2+11.5, 3+14)
-        #inkystartkey = self.nodes.constructKey(0+11.5, 3+14)
-        #clydestartkey = self.nodes.constructKey(4+11.5, 3+14)
         blinkynode = maze.getBlinkyStartNode(self.nodes)####
         pinkynode = maze.getPinkyStartNode(self.nodes)####
         inkynode = maze.getInkyStartNode(self.nodes)####
@@ -86,16 +72,6 @@ class GameController(object):
 
         self.ghosts.inky.startNode.denyAccess(RIGHT, self.ghosts.inky)
         self.ghosts.clyde.startNode.denyAccess(LEFT, self.ghosts.clyde)
-
-        #self.nodes.denyAccess(2+11.5, 0+14, DOWN, self.pacman)
-        #self.nodes.denyAccessList(2+11.5, 3+14, LEFT, self.ghosts)
-        #self.nodes.denyAccessList(2+11.5, 3+14, RIGHT, self.ghosts)
-
-        #self.nodes.denyAccessList(12, 14, UP, self.ghosts)
-        #self.nodes.denyAccessList(15, 14, UP, self.ghosts)
-        #self.nodes.denyAccessList(12, 26, UP, self.ghosts)
-        #self.nodes.denyAccessList(15, 26, UP, self.ghosts)
-        #self.nodes.denyAccessList(13.5, 14, DOWN, self.ghosts)#####
 
         self.fruitNode = maze.getFruitNode(self.nodes)#####
 

@@ -110,3 +110,17 @@ class MazeController(object):
     def loadMaze(self, level):
         return self.mazedict[level%len(self.mazedict)]()
 
+
+
+
+
+#newtext::from mazes import MazeController
+
+class GameController(object):
+    def __init__(self):
+        ...
+        #newtext::self.fruitNode = None
+        #newtext::self.maze = MazeController()
+
+    def startGame(self):
+        self.setBackground()
