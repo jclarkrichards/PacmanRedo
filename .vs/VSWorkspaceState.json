@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Final"
+    "\\Final",
+    "\\Pacman_Complete"
   ],
-  "SelectedNode": "\\Final\\mazes.py",
+  "SelectedNode": "\\Pacman_Complete\\ghosts.py",
   "PreviewInSolutionExplorer": false
 }

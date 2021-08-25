@@ -6,10 +6,10 @@ import numpy as np
 class Pellet(object):
     def __init__(self, row, column):
         self.name = PELLET
-        self.position = Vector2(column*TILEHEIGHT, row*TILEWIDTH)
+        self.position = Vector2(column*TILEWIDTH, row*TILEHEIGHT)
         self.color = WHITE
-        self.radius = 2
-        self.collideRadius = 2
+        self.radius = int(2 * TILEWIDTH / 16)
+        self.collideRadius = 2 * TILEWIDTH / 16
         self.points = 10
         self.visible = True
         
@@ -24,7 +24,7 @@ class PowerPellet(Pellet):
     def __init__(self, row, column):
         Pellet.__init__(self, row, column)
         self.name = POWERPELLET
-        self.radius = 8
+        self.radius = int(8 * TILEWIDTH / 16)
         self.points = 50
         self.flashTime = 0.2
         self.timer= 0

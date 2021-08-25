@@ -47,20 +47,22 @@ class Ghost(Entity):
     def startSpawn(self):
         self.mode.setSpawnMode()
         if self.mode.current == SPAWN:
-            self.speed = 150
+            self.setSpeed(150)
             self.directionMethod = self.goalDirection
             self.spawn()
 
     def startFreight(self):
         self.mode.setFreightMode()
         if self.mode.current == FREIGHT:
-            self.speed = 50
+            self.setSpeed(50)
             self.directionMethod = self.randomDirection         
 
     def normalMode(self):
-        self.speed = 100
+        self.setSpeed(100)
         self.directionMethod = self.goalDirection
         self.homeNode.denyAccess(DOWN, self)
+
+
 
 
 class Blinky(Ghost):

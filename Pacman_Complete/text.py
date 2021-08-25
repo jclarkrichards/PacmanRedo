@@ -57,13 +57,14 @@ class TextGroup(object):
         self.alltext.pop(id)
         
     def setupText(self):
-        self.alltext[SCORETXT] = Text("0".zfill(8), WHITE, 0, 16, 16)
-        self.alltext[LEVELTXT] = Text(str(1).zfill(3), WHITE, 368, 16, 16)
-        self.alltext[READYTXT] = Text("READY!", YELLOW, 180, 320, 16, visible=False)
-        self.alltext[PAUSETXT] = Text("PAUSED!", YELLOW, 170, 320, 16, visible=False)
-        self.alltext[GAMEOVERTXT] = Text("GAMEOVER!", YELLOW, 160, 320, 16, visible=False)
-        self.addText("SCORE", WHITE, 0, 0, 16)
-        self.addText("LEVEL", WHITE, 368, 0, 16)
+        size = TILEHEIGHT
+        self.alltext[SCORETXT] = Text("0".zfill(8), WHITE, 0, TILEHEIGHT, size)
+        self.alltext[LEVELTXT] = Text(str(1).zfill(3), WHITE, 23*TILEWIDTH, TILEHEIGHT, size)
+        self.alltext[READYTXT] = Text("READY!", YELLOW, 11.25*TILEWIDTH, 20*TILEHEIGHT, size, visible=False)
+        self.alltext[PAUSETXT] = Text("PAUSED!", YELLOW, 10.625*TILEWIDTH, 20*TILEHEIGHT, size, visible=False)
+        self.alltext[GAMEOVERTXT] = Text("GAMEOVER!", YELLOW, 10*TILEWIDTH, 20*TILEHEIGHT, size, visible=False)
+        self.addText("SCORE", WHITE, 0, 0, size)
+        self.addText("LEVEL", WHITE, 23*TILEWIDTH, 0, size)
 
     def update(self, dt):
         for tkey in list(self.alltext.keys()):
