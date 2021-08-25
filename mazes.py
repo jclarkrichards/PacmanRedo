@@ -113,7 +113,7 @@ class MazeController(object):
 
 
 
-
+"""
 #newtext::from mazes import MazeController
 
 class GameController(object):
@@ -124,3 +124,5 @@ class GameController(object):
 
     def startGame(self):
         self.setBackground()
+
+"""
