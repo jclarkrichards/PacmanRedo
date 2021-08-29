@@ -1,7 +1,7 @@
 import pygame
 from constants import *
-from animation import Animator
 import numpy as np
+from animation import Animator
 
 BASETILEWIDTH = 16
 BASETILEHEIGHT = 16
@@ -9,7 +9,7 @@ DEATH = 5
 
 class Spritesheet(object):
     def __init__(self):
-        self.sheet = pygame.image.load("spritesheet.png").convert()
+        self.sheet = pygame.image.load("spritesheet_mspacman.png").convert()
         transcolor = self.sheet.get_at((0,0))
         self.sheet.set_colorkey(transcolor)
         width = int(self.sheet.get_width() / BASETILEWIDTH * TILEWIDTH)
@@ -22,12 +22,12 @@ class Spritesheet(object):
         self.sheet.set_clip(pygame.Rect(x, y, width, height))
         return self.sheet.subsurface(self.sheet.get_clip())
 
-    
+
 class PacmanSprites(Spritesheet):
     def __init__(self, entity):
         Spritesheet.__init__(self)
         self.entity = entity
-        self.entity.image = self.getStartImage()       
+        self.entity.image = self.getStartImage()         
         self.animations = {}
         self.defineAnimations()
         self.stopimage = (8, 0)
@@ -75,7 +75,7 @@ class GhostSprites(Spritesheet):
         self.x = {BLINKY:0, PINKY:2, INKY:4, CLYDE:6}
         self.entity = entity
         self.entity.image = self.getStartImage()
-     
+
     def update(self, dt):
         x = self.x[self.entity.name]
         if self.entity.mode.current in [SCATTER, CHASE]:
@@ -98,7 +98,7 @@ class GhostSprites(Spritesheet):
                 self.entity.image = self.getImage(8, 6)
             elif self.entity.direction == UP:
                 self.entity.image = self.getImage(8, 4)
-       
+               
     def getStartImage(self):
         return self.getImage(self.x[self.entity.name], 4)
 
@@ -138,7 +138,6 @@ class LifeSprites(Spritesheet):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
 
 
-
 class MazeSprites(Spritesheet):
     def __init__(self, mazefile, rotfile):
         Spritesheet.__init__(self)
@@ -168,10 +167,3 @@ class MazeSprites(Spritesheet):
 
     def rotate(self, sprite, value):
         return pygame.transform.rotate(sprite, value*90)
-                
-
-
-
-
-
-    

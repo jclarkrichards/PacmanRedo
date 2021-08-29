@@ -4,6 +4,7 @@ from vector import Vector2
 from constants import *
 from entity import Entity
 from modes import ModeController
+from sprites import GhostSprites
 
 class Ghost(Entity):
     def __init__(self, node, pacman=None, blinky=None):
@@ -23,6 +24,7 @@ class Ghost(Entity):
         self.directionMethod = self.goalDirection
 
     def update(self, dt):
+        self.sprites.update(dt)
         self.mode.update(dt)
         if self.mode.current is SCATTER:
             self.scatter()
@@ -45,19 +47,22 @@ class Ghost(Entity):
     def startSpawn(self):
         self.mode.setSpawnMode()
         if self.mode.current == SPAWN:
-            self.speed = 150
+            self.setSpeed(150)
             self.directionMethod = self.goalDirection
             self.spawn()
 
     def startFreight(self):
         self.mode.setFreightMode()
         if self.mode.current == FREIGHT:
-            self.speed = 50
+            self.setSpeed(50)
             self.directionMethod = self.randomDirection         
 
     def normalMode(self):
-        self.speed = 100
+        self.setSpeed(100)
         self.directionMethod = self.goalDirection
+        self.homeNode.denyAccess(DOWN, self)
+
+
 
 
 class Blinky(Ghost):
@@ -65,6 +70,7 @@ class Blinky(Ghost):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = BLINKY
         self.color = RED
+        self.sprites = GhostSprites(self)
 
 
 class Pinky(Ghost):
@@ -72,6 +78,7 @@ class Pinky(Ghost):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = PINKY
         self.color = PINK
+        self.sprites = GhostSprites(self)
 
     def scatter(self):
         self.goal = Vector2(TILEWIDTH*NCOLS, 0)
@@ -85,6 +92,7 @@ class Inky(Ghost):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = INKY
         self.color = TEAL
+        self.sprites = GhostSprites(self)
 
     def scatter(self):
         self.goal = Vector2(TILEWIDTH*NCOLS, TILEHEIGHT*NROWS)
@@ -100,6 +108,7 @@ class Clyde(Ghost):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = CLYDE
         self.color = ORANGE
+        self.sprites = GhostSprites(self)
 
     def scatter(self):
         self.goal = Vector2(0, TILEHEIGHT*NROWS)

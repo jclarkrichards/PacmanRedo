@@ -65,7 +65,7 @@ class Ghost(Entity):
     def normalMode(self):
         self.speed = 100
         self.directionMethod = self.goalDirection
-        self.homeNode.denyAccess(DOWN, self)#######
+        self.homeNode.denyAccess(DOWN, self)
 
 
 

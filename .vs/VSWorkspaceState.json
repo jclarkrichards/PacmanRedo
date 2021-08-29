@@ -1,8 +1,15 @@
 {
   "ExpandedNodes": [
     "",
+<<<<<<< HEAD
     "\\Final"
   ],
   "SelectedNode": "\\Final\\run.py",
+=======
+    "\\Final",
+    "\\Pacman_Complete"
+  ],
+  "SelectedNode": "\\Pacman_Complete\\ghosts.py",
+>>>>>>> 329d78e67588c1a0b6fd0118cf33d53aa287ea5d
   "PreviewInSolutionExplorer": false
 }

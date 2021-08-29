@@ -70,10 +70,6 @@ class MazeBase(object):
     def addoffset(self, x, y):
         return x+self.homeoffset[0], y+self.homeoffset[1]
 
-        
-
-
-
 class Maze1(MazeBase):
     def __init__(self):
         MazeBase.__init__(self)
@@ -85,7 +81,6 @@ class Maze1(MazeBase):
         self.pacmanStart = (15, 26)
         self.fruitStart = (9, 20)
         self.ghostNodeDeny = {UP:((12, 14), (15, 14), (12, 26), (15, 26))}
-
 
 class Maze2(MazeBase):
     def __init__(self):
@@ -99,30 +94,9 @@ class Maze2(MazeBase):
         self.fruitStart = (11, 20)
         self.ghostNodeDeny = {UP:((9, 14), (18, 14), (11, 23), (16, 23))}
 
-
-
-
-
 class MazeController(object):
     def __init__(self):
         self.mazedict = {0:Maze1, 1:Maze2}
 
     def loadMaze(self, level):
         return self.mazedict[level%len(self.mazedict)]()
-
-
-
-
-"""
-#newtext::from mazes import MazeController
-
-class GameController(object):
-    def __init__(self):
-        ...
-        #newtext::self.fruitNode = None
-        #newtext::self.maze = MazeController()
-
-    def startGame(self):
-        self.setBackground()
-
-"""
